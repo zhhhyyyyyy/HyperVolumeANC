@@ -101,6 +101,8 @@ app/src/main/java/io/github/hypervolumeanc/
 
 模块侧不自行实现耳机协议：小米与 AirPods 走系统接口，Sony、Huawei、OPPO 分别走对应模块公开的广播接口。
 
+根目录的 `update.json` 是应用内更新检查读取的更新源，发布新版本时把 `VersionCode`、`VersionName`、`ReleaseNoteURL`、`APKURL` 与 `APKSize` 一起改掉即可。
+
 ## 交流 & 反馈
 
 - Telegram 群组：[HyperVolumeANC](https://t.me/+yCcx0sOHbMQyNTI1)

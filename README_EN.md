@@ -99,6 +99,8 @@ app/src/main/java/io/github/hypervolumeanc/
 └── MainActivity   home / settings / about tabs
 ```
 
+The `update.json` in the repository root is the feed used by the in-app update check — bump `VersionCode`, `VersionName`, `ReleaseNoteURL`, `APKURL` and `APKSize` together when publishing a new version.
+
 ## Community
 
 - Telegram group: [HyperVolumeANC](https://t.me/+yCcx0sOHbMQyNTI1)
