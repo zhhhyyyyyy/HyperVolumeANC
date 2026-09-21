@@ -1,47 +1,120 @@
+<div align="center">
+
+<img src="app/src/main/res/drawable-nodpi/ic_launcher_foreground.png" width="180" alt="HyperVolumeANC" />
+
 # HyperVolumeANC
 
-适用于小米澎湃 OS 4、libxposed API 102 的音量面板 ANC 快捷按钮。
+### 给澎湃 OS 4 的音量面板加一个更顺手的降噪按钮
 
-模块包名为 `io.github.hypervolumeanc`（旧版 `io.github.volumeanc` 已改名，请卸载旧版后重新在 LSPosed 中启用新模块）。
+简体中文
 
-首次启动会进入四步引导（欢迎 → 开发者 → 条款 → 完成），文案与链接集中在 `app/src/main/res/values/oobe.xml`，开发者头像使用 `app/src/main/res/drawable-nodpi/developer_avatar.jpg`；关于页里有“重新查看引导”入口。
+</div>
 
-主界面分为“主页”（模块开关与支持的耳机）、“设置”（LSPosed 状态、语言/主题/底栏样式与更新）和“关于”三个标签页。底部导航栏直接移植自 HyperChanger（Apache-2.0，作者 btm_m）：`app/src/main/java/io/github/hypervolumeanc/nav/` 下的 GlassNavigation / NativeViewBackdrop / LiquidInteraction 等文件为原样搬运，仅改了包名，因此 HyperOS 底栏 / 悬浮底栏 / 液态玻璃底栏三种样式与上游完全一致；依赖 Compose Multiplatform 1.11、Miuix 0.9.3、backdrop 2.0.0，compileSdk 需要 37。关于页与引导页使用 AGSL 运行时着色器绘制动态渐变背景（做法参考 HyperCeiler），渐变位于内容下方并随页面一起滚动。
+## 当前支持的版本
 
-构建要求：Kotlin 2.3.x + Compose 插件、Android SDK Platform 37（`platforms/android-37`）。
+Android 15-16 的小米澎湃 OS 4，模块基于 libxposed API 102（LSPosed）。
 
-界面文案在 `app/src/main/res/values/strings.xml`（中文）与 `values-en/strings.xml`（英文）中，语言、主题与底栏样式都能在应用内切换；项目链接在 `strings.xml` 的 `project_url` 中填写（留空时显示“尚未发布”）。
+目前只在开发者自用的小米澎湃 OS 4 设备上做过完整测试，其它机型与地区版本可能存在差异，欢迎反馈。
 
-## 使用
+## 使用前说明
 
-1. 安装构建生成的 APK。
-2. 在 LSPosed 中启用模块，作用域包含“系统界面 (`com.android.systemui`)”和“蓝牙扩展 (`com.xiaomi.bluetooth`)”。
-3. 重启手机。
-4. 连接支持控制降噪/通透的小米、Sony、Huawei 耳机或 AirPods，唤出音量面板后点击 ANC 按钮切换模式；没有兼容耳机连接时按钮不会显示。
-5. 展开音量面板后，ANC 行右侧会显示“断开连接”按钮，可直接断开当前受支持的耳机。
-6. 连接 OPPO 耳机时，需要额外安装并启用 [OppoPods](https://github.com/1812z/OppoPods) 模块（作用域包含 `com.android.bluetooth` 与 `com.xiaomi.bluetooth`），本模块通过它的广播接口控制降噪并在音量面板上回显状态。
+请在 [LSPosed](https://github.com/LSPosed/LSPosed) 中启用 HyperVolumeANC，作用域需要同时勾选：
 
-三种模式在音量面板上分别是：降噪（圆环）、通透（光点）、关闭（自适应图标）。
+- **系统界面**（`com.android.systemui`）—— 音量面板里的 ANC 行由它显示
+- **蓝牙扩展**（`com.xiaomi.bluetooth`）—— 耳机状态与广播经由它转发
 
-## 设置
+勾选后重启作用域（需要 Root 权限），App 的「设置 - 模块状态」会显示两个作用域是否都已连接。
 
-设置页提供以下选项，修改后立即下发给作用域进程，无需重启：
+本模块只调用系统自带的耳机服务与各兼容模块公开的广播接口，不包含任何耳机私有协议实现。
 
-- **启用音量面板按钮**：关闭后音量面板不再注入 ANC 行与断开连接按钮。
-- **循环包含关闭模式**：开启后点击音量按钮按“降噪 → 通透 → 关闭”依次循环，关闭时只在“降噪 ⇄ 通透”之间切换；卡片下方用图标标出切换顺序。
-- **LSPosed 模块状态**：设置页顶部每次进入都会向系统界面与蓝牙扩展发一次探测，只有模块进程应答才显示“已连接”，停用模块后立即变回“未连接”。
-- 右上角**重启作用域**按钮：通过 root 重启 `com.android.systemui` 与 `com.xiaomi.bluetooth` 两个作用域进程。
-- 切换降噪或通透时会通过状态栏强通知在超级岛显示“降噪开启 / 通透开启”，左侧为对应的模式图标、右侧为文字（`strong_toast_action` 必须带 `island_param`，否则 SystemUI 会静默丢弃），关闭模式不弹通知。
-- 支持设备列表为 Xiaomi（含 Redmi）、Apple、Sony、Huawei、Oppo 各自带品牌矢量图标，图标槽位统一宽度，字标与图形标志视觉体量一致。
-- 应用信息中包含关于、开源代码声明、贡献者与 MIUIX 构建说明。
+Sony、Huawei、OPPO 耳机需要额外安装对应的第三方模块，本模块本身不提供这些品牌的兼容能力。
 
-支持的耳机：小米耳机与 AirPods 由系统原生支持；Sony 耳机需要 [SonyPods](https://github.com/Mercury000/SonyPods)，Huawei 耳机需要 [HuaweiPods](https://github.com/Nshpiter/HuaweiPods)，OPPO 耳机需要 [OppoPods](https://github.com/1812z/OppoPods)。
+只支持降噪开关、不支持通透的耳机（例如 HUAWEI FreeBuds 5），按钮只会在降噪开启与关闭之间切换。
 
-模块调用系统自带的 `com.xiaomi.bluetooth` 耳机服务、AirPods Repository，以及 Sony、Huawei、OPPO 兼容模块公开的广播接口，不自行实现耳机私有协议。
+## 功能
+
+- **音量面板按钮** —— 在静音与勿扰之外新增一个实例按钮，一键切换耳机降噪模式
+- **三种状态** —— 降噪、通透、关闭；可自行选择是「降噪 ⇄ 通透」两态循环，还是「降噪 → 通透 → 关闭」三态循环
+- **状态图标** —— 降噪是圆环、通透是光点、关闭是自适应图标，与音量面板其余元素同一套配色
+- **断开耳机** —— 展开音量面板的耳机菜单后，可直接断开当前连接的耳机
+- **超级岛提示** —— 切到降噪或通透时，通过状态栏强通知显示「降噪开启 / 通透开启」与对应图标，切到关闭不打扰
+- **模块状态检测** —— 设置页会向两个作用域发探测请求，实时显示是否已连接，而不是沿用旧状态
+- **重启作用域** —— 右上角一键重启两个作用域进程，修改或更新后无需重启手机
+- **外观选项** —— 语言（跟随系统 / 简体中文 / English）、主题（浅色 / 深色 / 跟随系统）、底部导航栏样式（HyperOS 底栏 / 悬浮底栏 / 液态玻璃底栏）
+- **更新检查** —— 设置页可检查新版本，更新源尚未发布时会明确显示为「尚未发布更新地址」
+
+## 支持的耳机
+
+| 品牌 | 支持方式 | 依赖模块 |
+| --- | --- | --- |
+| Xiaomi（含 Redmi） | 系统原生 | 无需额外模块 |
+| Apple 耳机 | 系统原生 | 无需额外模块 |
+| Sony 耳机 | 第三方模块 | [SonyPods](https://github.com/Mercury000/SonyPods) |
+| Huawei 耳机 | 第三方模块 | [HuaweiPods](https://github.com/Nshpiter/HuaweiPods) |
+| OPPO 耳机 | 第三方模块 | [OppoPods](https://github.com/1812z/OppoPods) |
+
+## 界面
+
+应用分为三个标签页，底部导航栏可在设置中切换样式：
+
+- **主页** —— 模块开关、循环方式与模式示意、支持的耳机列表
+- **设置** —— LSPosed 连接状态、语言 / 主题 / 底栏样式、更新模块
+- **关于** —— 大图标与渐变动效、功能说明、开发者的话、项目链接、开源代码声明与贡献者
+
+首次安装会进入四步引导（欢迎 → 开发者 → 条款 → 完成），「关于」页可以随时重新查看。
 
 ## 构建
 
+环境要求：
+
+- JDK 17
+- Android SDK Platform 37（`compileSdk = 37`）
+- Kotlin 2.3.x 与 Compose 插件
+
 ```powershell
-.\gradlew.bat assembleDebug
-.\gradlew.bat assembleRelease   # 混淆 + 去除全部日志输出，使用 debug 签名便于直接安装
+.\gradlew.bat assembleDebug     # 带日志，排查问题用
+.\gradlew.bat assembleRelease   # R8 混淆并剥离全部日志输出
 ```
+
+依赖：Compose Multiplatform 1.11、Miuix 0.9.3、AndroidLiquidGlass（`io.github.kyant0:backdrop` / `shapes`）、libxposed API 102。
+
+## 项目结构
+
+```
+app/src/main/java/io/github/hypervolumeanc/
+├── hook/          音量面板注入、耳机控制、超级岛提示（运行在被注入的进程里）
+├── nav/           底部导航栏，移植自 HyperChanger（Apache-2.0），仅改包名
+├── OobeActivity   首次启动引导
+├── AboutPage      关于页
+└── MainActivity   主页 / 设置 / 关于三个标签页
+```
+
+模块侧不自行实现耳机协议：小米与 AirPods 走系统接口，Sony、Huawei、OPPO 分别走对应模块公开的广播接口。
+
+## 交流 & 反馈
+
+- Telegram 群组：[HyperVolumANC](https://t.me/HyperVolumANC)
+- 问题反馈：[GitHub Issues](https://github.com/zhhhyyyyyy/HyperVolumeANC/issues)
+
+反馈前请先确认 LSPosed 已启用模块、两个作用域都已勾选，并附上 LSPosed 日志里 `HyperVolumeANC` 相关的行，定位会快很多。
+
+## 感谢
+
+- [HyperChanger](https://github.com/ColdP/HyperChanger)（btm_m）—— 底部导航栏三种样式的实现直接来自该项目，Apache-2.0
+- [AndroidLiquidGlass](https://github.com/Kyant0/AndroidLiquidGlass)（Kyant0）—— 底栏的玻璃质感渲染
+- [MIUIX](https://github.com/compose-miuix-ui/miuix) —— HyperOS 风格组件库
+- [HyperCeiler](https://github.com/ReChronoRain/HyperCeiler) —— 关于页渐变与引导页版式参考
+- [OppoPods](https://github.com/1812z/OppoPods)（1812z）、[HuaweiPods](https://github.com/Nshpiter/HuaweiPods)（Nshpiter）、[SonyPods](https://github.com/Mercury000/SonyPods)（Mercury000）
+- [LibrePods](https://github.com/kavishdevar/librepods)（kavishdevar）—— 模式图标参考
+
+完整的第三方声明见 [NOTICE](NOTICE)。
+
+## 许可证
+
+[Apache License 2.0](LICENSE)。
+
+## 免责声明
+
+本模块通过 Xposed API 修改系统界面与蓝牙相关的显示和行为，仅在小米澎湃 OS 4 上做过适配与测试。刷机、模块冲突、系统升级都可能造成界面异常或功能失效，请在了解风险的前提下使用；由使用本模块产生的任何直接或间接损失由使用者自行承担。
+
+本项目与小米、Apple、Sony、Huawei、OPPO 及其关联公司均无关联。
