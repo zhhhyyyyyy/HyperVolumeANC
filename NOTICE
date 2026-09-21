@@ -22,3 +22,11 @@ Copyright 2026 zhhhyyyyyy
 - HuaweiPods (https://github.com/Nshpiter/HuaweiPods)：Huawei 耳机控制接口
 - SonyPods (https://github.com/Mercury000/SonyPods)：Sony 耳机状态接口
 - LibrePods (https://github.com/kavishdevar/librepods)：AirPods 模式图标参考
+
+图标声明：
+
+- app/src/main/res/drawable/ic_brand_lsposed.xml
+  LSPosed 图标取自 LSPosed 项目（https://github.com/LSPosed/LSPosed），GPL-3.0，
+  仅用于标识本模块所运行的框架。
+- app/src/main/res/drawable/ic_brand_openai.xml
+  OpenAI 标记取自 Simple Icons（https://github.com/simple-icons/simple-icons），CC0-1.0。

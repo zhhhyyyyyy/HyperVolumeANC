@@ -220,6 +220,8 @@ public final class OobeActivity extends Activity {
         links.addView(projectRow());
         Ui.addDivider(links);
         links.addView(telegramRow());
+        Ui.addDivider(links);
+        links.addView(codexRow());
         LinearLayout.LayoutParams linksParams = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         linksParams.topMargin = Ui.dp(this, 22);
@@ -247,6 +249,13 @@ public final class OobeActivity extends Activity {
         row.setOnClickListener(view ->
                 Ui.openUrl(this, getString(R.string.oobe_developer_telegram)));
         return row;
+    }
+
+    /** 彩蛋行：这个模块的界面与代码大多是 Codex 写的，用 OpenAI 图标当梗。 */
+    private View codexRow() {
+        return Ui.linkRow(this, R.drawable.ic_brand_openai,
+                getString(R.string.oobe_developer_codex),
+                getString(R.string.oobe_developer_codex_summary), null, false);
     }
 
     private View buildTermsStep() {

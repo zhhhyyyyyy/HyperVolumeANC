@@ -20,6 +20,7 @@ final class AboutPage {
     private static final String DEVELOPER_URL = "https://github.com/zhhhyyyyyy";
     private static final String TELEGRAM_URL = "https://t.me/+yCcx0sOHbMQyNTI1";
     private static final String MIUIX_URL = "https://compose-miuix-ui.github.io/miuix/";
+    private static final String REPO_URL = "https://github.com/zhhhyyyyyy/HyperVolumeANC";
 
     private AboutPage() {
     }
@@ -126,7 +127,7 @@ final class AboutPage {
         wrapper.addView(developer, matchParams(activity, 12));
 
         LinearLayout links = Ui.card(activity);
-        links.addView(replayRow(activity));
+        links.addView(starRow(activity));
         Ui.addDivider(links);
         links.addView(projectRow(activity));
         Ui.addDivider(links);
@@ -134,7 +135,7 @@ final class AboutPage {
                 activity.getString(R.string.about_telegram),
                 activity.getString(R.string.about_telegram_summary), TELEGRAM_URL));
         Ui.addDivider(links);
-        links.addView(linkRow(activity, R.drawable.ic_brand_github,
+        links.addView(linkRow(activity, R.drawable.ic_brand_lsposed,
                 activity.getString(R.string.about_framework),
                 activity.getString(R.string.about_framework_summary),
                 "https://github.com/LSPosed/LSPosed"));
@@ -142,6 +143,8 @@ final class AboutPage {
         links.addView(linkRow(activity, 0,
                 activity.getString(R.string.about_miuix),
                 activity.getString(R.string.about_miuix_summary), MIUIX_URL));
+        Ui.addDivider(links);
+        links.addView(replayRow(activity));
         wrapper.addView(links, matchParams(activity, 12));
 
         LinearLayout appInfo = Ui.card(activity);
@@ -219,6 +222,15 @@ final class AboutPage {
             activity.startActivity(new Intent(activity, OobeActivity.class));
             activity.finish();
         });
+        return row;
+    }
+
+    /** Star 请求行：直接打开 GitHub 仓库首页。 */
+    private static View starRow(Activity activity) {
+        View row = Ui.linkRow(activity, R.drawable.ic_star,
+                activity.getString(R.string.about_star),
+                activity.getString(R.string.about_star_summary), Ui.chevron(activity), true);
+        row.setOnClickListener(view -> Ui.openUrl(activity, REPO_URL));
         return row;
     }
 

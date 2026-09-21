@@ -10,6 +10,7 @@
 [![Framework](https://img.shields.io/badge/Framework-LSPosed-blueviolet?style=flat-square)](https://github.com/LSPosed/LSPosed)
 [![ROM](https://img.shields.io/badge/ROM-HyperOS%204%20Beta-orange?style=flat-square)](https://hyperos.mi.com)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue?style=flat-square)](LICENSE)
+[![Stars](https://img.shields.io/github/stars/zhhhyyyyyy/HyperVolumeANC?style=flat-square&logo=github&label=Star)](https://github.com/zhhhyyyyyy/HyperVolumeANC/stargazers)
 
 **[简体中文](README.md)** | **English**
 
@@ -100,6 +101,10 @@ app/src/main/java/io/github/hypervolumeanc/
 ```
 
 The `update.json` in the repository root is the feed used by the in-app update check — bump `VersionCode`, `VersionName`, `ReleaseNoteURL`, `APKURL` and `APKSize` together when publishing a new version.
+
+## Support the project
+
+HyperVolumeANC is a free module maintained in spare time. If it makes your volume panel a little handier, a ⭐ star on the [GitHub repository](https://github.com/zhhhyyyyyy/HyperVolumeANC) is the most direct way to say thanks; bug reports are welcome in [Issues](https://github.com/zhhhyyyyyy/HyperVolumeANC/issues) or the [Telegram group](https://t.me/+yCcx0sOHbMQyNTI1).
 
 ## Community
 
