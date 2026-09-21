@@ -1,8 +1,8 @@
 ## Xposed entry point: referenced by name from META-INF/xposed/java_init.list.
--keep class io.github.hypervolumeanc.hook.HookEntry { *; }
+-keep class io.github.zhhhyyyyyy.hypervolumeanc.hook.HookEntry { *; }
 
 ## Hook helpers are loaded through the module class loader, keep them intact.
--keep class io.github.hypervolumeanc.hook.** { *; }
+-keep class io.github.zhhhyyyyyy.hypervolumeanc.hook.** { *; }
 -keepattributes *Annotation*, Exceptions, InnerClasses, Signature, SourceFile, LineNumberTable
 -dontwarn io.github.libxposed.**
 

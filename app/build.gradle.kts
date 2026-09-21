@@ -5,15 +5,15 @@ plugins {
 }
 
 android {
-    namespace = "io.github.hypervolumeanc"
+    namespace = "io.github.zhhhyyyyyy.hypervolumeanc"
     compileSdk = 37
 
     defaultConfig {
-        applicationId = "io.github.hypervolumeanc"
+        applicationId = "io.github.zhhhyyyyyy.hypervolumeanc"
         minSdk = 34
         targetSdk = 36
-        versionCode = 28
-        versionName = "1.5.8"
+        versionCode = 29
+        versionName = "1.5.9"
     }
 
     buildTypes {

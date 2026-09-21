@@ -47,15 +47,15 @@
             android:parentActivityName=".MainActivity" />
         <provider
             android:name=".ModuleConfigProvider"
-            android:authorities="io.github.hypervolumeanc.config"
+            android:authorities="io.github.zhhhyyyyyy.hypervolumeanc.config"
             android:exported="true"
             android:grantUriPermissions="false" />
         <receiver
             android:name=".HookStatusReceiver"
             android:exported="true">
             <intent-filter>
-                <action android:name="io.github.hypervolumeanc.action.HOOK_ALIVE" />
-                <action android:name="io.github.hypervolumeanc.action.PONG" />
+                <action android:name="io.github.zhhhyyyyyy.hypervolumeanc.action.HOOK_ALIVE" />
+                <action android:name="io.github.zhhhyyyyyy.hypervolumeanc.action.PONG" />
             </intent-filter>
         </receiver>
     </application>
