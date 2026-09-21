@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">HyperVolumeANC</string>
+    <!-- Common -->
+    <string name="action_back">Back</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_restart">Restart</string>
+    <string name="action_next">Next</string>
+    <string name="action_previous">Back</string>
+    <string name="action_start">Get started</string>
+    <string name="action_agree_enter">Agree and continue</string>
+    <string name="action_enter_app">Enter HyperVolumeANC</string>
+    <string name="status_connected">Connected</string>
+    <string name="status_disconnected">Not connected</string>
+    <string name="status_checking">Checking…</string>
+    <string name="mode_noise_cancelling">Noise cancelling</string>
+    <string name="mode_transparency">Transparency</string>
+    <string name="mode_off">Off</string>
+
+    <!-- Bottom navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_settings">Settings</string>
+    <string name="nav_about">About</string>
+
+    <!-- Home -->
+    <string name="home_group_module">Module</string>
+    <string name="home_module_enable_title">Volume panel button</string>
+    <string name="home_module_enable_summary">Show the noise control row and the disconnect button in the volume panel when a supported headset is connected.</string>
+    <string name="home_cycle_title">Include Off in the cycle</string>
+    <string name="home_cycle_on_summary">On: Noise cancelling → Transparency → Off.</string>
+    <string name="home_cycle_off_summary">Off: switch between noise cancelling and transparency only.</string>
+    <string name="home_cycle_disabled_summary">Module disabled.</string>
+    <string name="home_mode_hint">The volume panel button cycles in the order shown above. Headsets that only support noise cancelling will just toggle noise cancelling on and off.</string>
+    <string name="home_group_devices">Supported headsets</string>
+    <string name="device_xiaomi">Xiaomi</string>
+    <string name="device_xiaomi_note">includes Redmi buds</string>
+    <string name="device_xiaomi_summary">Supported natively by HyperOS, no extra module needed.</string>
+    <string name="device_apple">Apple earbuds</string>
+    <string name="device_apple_summary">Supported natively by HyperOS through the system headset service.</string>
+    <string name="device_sony">Sony headset</string>
+    <string name="device_huawei">Huawei headset</string>
+    <string name="device_oppo">Oppo headset</string>
+    <string name="device_needs_module">Requires the %1$s module, tap to open its repository</string>
+
+    <!-- Settings -->
+    <string name="settings_group_status">Module status</string>
+    <string name="settings_status_title">LSPosed module</string>
+    <string name="settings_status_hint">Each scoped process reports back as soon as the module is loaded. If it shows “Not connected”, make sure the module is enabled in LSPosed with the System UI and Bluetooth extension scopes checked.</string>
+    <string name="settings_status_detail">System UI: %1$s · Bluetooth extension: %2$s</string>
+    <string name="settings_scope_systemui">System UI</string>
+    <string name="settings_scope_bluetooth">Bluetooth extension</string>
+    <string name="settings_group_module">Module behaviour</string>
+    <string name="settings_group_appearance">Appearance</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_language_summary">Change the interface language. Some system components follow the system language.</string>
+    <string name="settings_language_system">Follow system</string>
+    <string name="settings_language_zh">简体中文</string>
+    <string name="settings_language_en">English</string>
+    <string name="settings_theme">Theme</string>
+    <string name="settings_theme_summary">Use a light or dark appearance for the app.</string>
+    <string name="settings_theme_system">Follow system</string>
+    <string name="settings_theme_light">Light</string>
+    <string name="settings_theme_dark">Dark</string>
+    <string name="settings_nav_style">Bottom bar style</string>
+    <string name="settings_nav_style_summary">Switch the shape and material of the bottom navigation bar.</string>
+    <string name="settings_nav_style_hyper">HyperOS bar</string>
+    <string name="settings_nav_style_floating">HyperOS floating bar</string>
+    <string name="settings_nav_style_glass">Liquid glass bar</string>
+    <string name="settings_group_info">App info</string>
+    <string name="settings_about">About</string>
+    <string name="settings_licenses">Open source licences</string>
+    <string name="settings_contributors">Contributors</string>
+    <string name="restart_dialog_title">Restart scopes</string>
+    <string name="restart_dialog_summary">The module reloads in the selected processes, so new settings or a new build take effect immediately.</string>
+    <string name="restart_no_root">Restart failed: no root access (su denied or unavailable)</string>
+    <string name="restart_success">Restarted: %1$s</string>
+    <string name="restart_partial">Restarted %1$d, failed:\n%2$s</string>
+    <string name="restart_failed">Restart failed:\n%1$s</string>
+    <string name="restart_not_installed">%1$s: package not installed</string>
+    <string name="restart_not_running">%1$s: process not running</string>
+    <string name="restart_kill_failed">%1$s: could not kill the process</string>
+
+    <!-- Module update -->
+    <string name="settings_group_update">Updates</string>
+    <string name="update_title">Check for updates</string>
+    <string name="update_summary">Current version %1$s</string>
+    <string name="update_summary_unset">Current version %1$s · no update feed yet</string>
+    <string name="update_dialog_title">Check for updates</string>
+    <string name="update_current">Current version: %1$s (%2$d)</string>
+    <string name="update_checking">Checking for updates…</string>
+    <string name="update_unset">No update feed published yet. Once it exists the latest version shows up here.</string>
+    <string name="update_latest">You are on the latest version.</string>
+    <string name="update_available">New version available: %1$s (%2$d)</string>
+    <string name="update_error">Update check failed: %1$s</string>
+    <string name="update_open_download">Open download</string>
+    <string name="update_recheck">Check again</string>
+    <string name="update_url"></string>
+
+    <!-- About -->
+    <string name="about_tagline">Version %1$s · tested on Xiaomi HyperOS 4</string>
+    <string name="about_feature_title">What it does</string>
+    <string name="about_feature_body">Adds a third instance button next to silent and DND in the HyperOS 4 volume panel so noise cancelling, transparency and off can be switched directly. Expanding the headset menu in the volume panel also lets you disconnect the connected headset.</string>
+    <string name="about_developer_label">Developer</string>
+    <string name="about_developer_tip_title">A note from the developer</string>
+    <string name="about_developer_tip_body">This module started with a simple idea: a more intuitive and quicker way to switch noise cancelling. If you run into problems, feel free to ask in the group or open an issue on GitHub. If it works well for you, a star is more than enough.</string>
+    <string name="about_replay_oobe">Show the guide again</string>
+    <string name="about_replay_oobe_summary">Replay the four step first-run guide</string>
+    <string name="about_project_link">Project link</string>
+    <string name="about_project_placeholder">Not published yet</string>
+    <string name="about_telegram">Telegram group</string>
+    <string name="about_telegram_summary">@HyperVolumANC · tap to join</string>
+    <string name="about_framework">Module framework</string>
+    <string name="about_framework_summary">libxposed API 102 (LSPosed)</string>
+    <string name="about_miuix">Built on MIUIX</string>
+    <string name="about_miuix_summary">HyperOS style component library</string>
+    <string name="about_package">Package name</string>
+    <string name="about_scope">Module scopes</string>
+    <string name="about_scopes_value">com.android.systemui\ncom.xiaomi.bluetooth</string>
+    <string name="about_copyright">© 2026 %1$s</string>
+
+    <!-- Licences -->
+    <string name="licenses_intro_title">HyperVolumeANC builds on the following open source projects and public interfaces. Thanks to every author and contributor.</string>
+    <string name="licenses_intro_summary">Xiaomi and Apple earbuds are supported natively. Sony, Huawei and OPPO headsets are controlled through the interfaces published by their modules; this module does not implement any headset protocol itself.</string>
+    <string name="license_lsposed_desc">Module API, remote preferences and service communication</string>
+    <string name="license_librepods_desc">Reference for the AirPods listening mode icons</string>
+    <string name="license_oppopods_desc">OPPO headset support on HyperOS</string>
+    <string name="license_huaweipods_desc">Huawei headset compatibility and control interface</string>
+    <string name="license_sonypods_desc">Sony headset state and control interface</string>
+    <string name="license_hyperchanger_desc">Bottom navigation bar (HyperOS / floating / liquid glass), Apache License 2.0</string>
+    <string name="license_hyperceiler_desc">Reference for the about page gradient and the onboarding layout</string>
+    <string name="license_liquidglass_desc">Glass material libraries used by the bar (backdrop / shapes) · Apache License 2.0</string>
+    <string name="license_miuix_desc">HyperOS style interface and components</string>
+
+    <!-- Contributors -->
+    <string name="contributors_intro">Thanks to the following developers for the implementations and references behind HyperVolumeANC.</string>
+    <string name="contributor_self_role">HyperVolumeANC developer</string>
+    <string name="contributor_1812z_role">OppoPods author · OPPO headset support</string>
+    <string name="contributor_nshpiter_role">HuaweiPods author · Huawei headset support</string>
+    <string name="contributor_mercury_role">SonyPods author · Sony headset support</string>
+    <string name="contributor_kavish_role">LibrePods author · AirPods protocol and icons</string>
+    <string name="contributor_coldp_role">HyperChanger author · bottom navigation bar</string>
+    <string name="contributor_rechrono_role">HyperCeiler author · about page and onboarding reference</string>
+    <string name="contributor_kyant_role">AndroidLiquidGlass · liquid glass and bottom navigation</string>
+    <string name="contributor_miuix_role">HyperOS style component library</string>
+
+    <!-- Onboarding -->
+    <string name="oobe_welcome_subtitle">A quick noise control button for the HyperOS 4 volume panel</string>
+    <string name="oobe_welcome_point_1">Adds one more instance button next to silent and DND so noise cancelling is one tap away</string>
+    <string name="oobe_welcome_point_2">Supports noise cancelling, transparency and off, with an optional three state cycle</string>
+    <string name="oobe_welcome_point_3">Expanding the headset menu in the volume panel lets you disconnect the headset directly</string>
+    <string name="oobe_developer_name">zhhhyyyyyy</string>
+    <string name="oobe_developer_project_title">Project link</string>
+    <string name="oobe_developer_project_placeholder">Not published yet</string>
+    <string name="oobe_developer_telegram_title">Telegram group</string>
+    <string name="oobe_developer_telegram">https://t.me/HyperVolumANC</string>
+    <string name="oobe_terms_title">Terms and notices</string>
+    <string name="oobe_terms_body">1. HyperVolumeANC is a local module that runs on LSPosed. It only changes how the volume panel looks and how headsets are controlled on this device. It never connects to the network and never collects or uploads personal data.\n\n2. Enable the module in LSPosed and check the “System UI (com.android.systemui)” and “Bluetooth extension (com.xiaomi.bluetooth)” scopes, otherwise the noise control button will not appear in the volume panel.\n\n3. Xiaomi earbuds and AirPods are supported by the system itself. Sony, Huawei and OPPO headsets rely on third party modules such as SonyPods, HuaweiPods and OppoPods; their licences and terms also apply.\n\n4. This module is provided “as is” without any warranty. Flashing, module conflicts and system updates can all cause problems, so please use it with that in mind.\n\n5. After reinstalling or clearing app data you will be asked to read and accept these terms again.</string>
+    <string name="oobe_terms_agree">I have read and accept the terms above</string>
+    <string name="oobe_done_title">All set</string>
+    <string name="oobe_done_summary">Module switches and supported headsets live in Home, module status, appearance and app info in Settings, and the credits in About. If the noise control button does not show up in the volume panel, check the scopes and restart the scopes or the phone once.</string>
+    <string name="project_url">https://github.com/zhhhyyyyyy/HyperVolumeANC</string>
+</resources>

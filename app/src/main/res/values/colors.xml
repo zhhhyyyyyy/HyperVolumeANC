@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="window_background">#FFF2F3F7</color>
+    <color name="card_background">#FFFFFFFF</color>
+    <color name="text_primary">#FF141414</color>
+    <color name="text_secondary">#99141414</color>
+    <color name="text_tertiary">#66141414</color>
+    <color name="divider_color">#0F000000</color>
+    <color name="accent_color">#FF0B7A75</color>
+    <color name="ripple_color">#14000000</color>
+    <color name="icon_tint">#FF141414</color>
+    <color name="status_connected">#FF6FD44E</color>
+    <color name="status_disconnected">#FFFF7B7B</color>
+    <color name="button_secondary">#14000000</color>
+    <color name="button_primary_text">#FFFFFFFF</color>
+    <color name="nav_background">#E8FFFFFF</color>
+    <color name="nav_outline">#14000000</color>
+    <color name="nav_item_selected">#1F0B7A75</color>
+    <color name="nav_pill">#14000000</color>
+    <color name="nav_background_floating">#D1F5F5F5</color>
+    <color name="nav_background_flat">#FAFFFFFF</color>
+    <color name="nav_background_glass">#99FFFFFF</color>
+    <color name="nav_outline_glass">#33FFFFFF</color>
+    <color name="icon_plate">#F2FFFFFF</color>
+    <color name="gradient_start">#FFE6F3F0</color>
+    <color name="gradient_end">#FFE2E9FB</color>
+</resources>

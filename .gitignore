@@ -1,0 +1,26 @@
+# 构建产物
+build/
+app/build/
+.gradle/
+.kotlin/
+local.properties
+signing.properties
+*.apk
+*.jadx
+
+# 本机工具链
+.toolchains/
+
+# 本地参考资料：反编译的系统 APK / 第三方模块源码，禁止发布
+references/
+
+# 临时克隆与脚本
+.tmp-*
+.tmp_*
+
+# IDE
+.idea/
+*.iml
+.DS_Store
+
+*.bak

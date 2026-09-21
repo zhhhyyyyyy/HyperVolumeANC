@@ -1,0 +1,24 @@
+HyperVolumeANC
+Copyright 2026 zhhhyyyyyy
+
+本项目的部分代码来自第三方开源项目，遵循其原始许可：
+
+1. HyperChanger (https://github.com/ColdP/HyperChanger)
+   Copyright 2026 btm_m, Apache License 2.0
+   使用范围：app/src/main/java/io/github/hypervolumeanc/nav/ 下的底部导航栏实现
+   （GlassNavigation.kt / NativeViewBackdrop.kt / LiquidInteraction.kt /
+   MaterialRoundedPlayerIcons.kt / NavigationStyles.kt），仅修改了包名。
+
+2. AndroidLiquidGlass (https://github.com/Kyant0/AndroidLiquidGlass)
+   Apache License 2.0，通过 Maven 依赖 io.github.kyant0:backdrop / io.github.kyant0:shapes 使用。
+
+3. MIUIX (https://github.com/compose-miuix-ui/miuix)
+   Apache License 2.0，通过 Maven 依赖 top.yukonga.miuix.kmp:* 使用。
+
+以下项目仅作为实现参考，未直接引用其代码：
+
+- HyperCeiler (https://github.com/ReChronoRain/HyperCeiler)：关于页渐变背景与引导页版式参考
+- OppoPods (https://github.com/1812z/OppoPods)：OPPO 耳机广播接口
+- HuaweiPods (https://github.com/Nshpiter/HuaweiPods)：Huawei 耳机控制接口
+- SonyPods (https://github.com/Mercury000/SonyPods)：Sony 耳机状态接口
+- LibrePods (https://github.com/kavishdevar/librepods)：AirPods 模式图标参考
