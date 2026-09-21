@@ -115,6 +115,8 @@ Please make sure the module is enabled in LSPosed with both scopes checked, and 
 
 ## Credits
 
+- [OpenAI Codex](https://openai.com/codex) — wrote most of the code and UI of this module
+- [Claude](https://claude.ai) (Anthropic) — code and copy assistance
 - [HyperChanger](https://github.com/ColdP/HyperChanger) (btm_m) — the three bottom bar styles are taken directly from this project, Apache-2.0
 - [AndroidLiquidGlass](https://github.com/Kyant0/AndroidLiquidGlass) (Kyant0) — glass material rendering for the bar
 - [MIUIX](https://github.com/compose-miuix-ui/miuix) — HyperOS style component library

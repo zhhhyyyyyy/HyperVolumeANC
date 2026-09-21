@@ -133,6 +133,8 @@
     <!-- Contributors -->
     <string name="contributors_intro">Thanks to the following developers for the implementations and references behind HyperVolumeANC.</string>
     <string name="contributor_self_role">HyperVolumeANC developer</string>
+    <string name="contributor_openai_role">Wrote most of the code and UI of this module</string>
+    <string name="contributor_claude_role">Anthropic · code and copy assistance</string>
     <string name="contributor_1812z_role">OppoPods author · OPPO headset support</string>
     <string name="contributor_nshpiter_role">HuaweiPods author · Huawei headset support</string>
     <string name="contributor_mercury_role">SonyPods author · Sony headset support</string>

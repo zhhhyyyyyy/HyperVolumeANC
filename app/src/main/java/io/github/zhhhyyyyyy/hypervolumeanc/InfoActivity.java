@@ -106,6 +106,10 @@ public final class InfoActivity extends Activity {
         LinearLayout card = Ui.card(this);
         addProject(card, true, "zhhhyyyyyy", "",
                 getString(R.string.contributor_self_role), DEVELOPER_URL);
+        addProject(card, true, "OpenAI Codex", "",
+                getString(R.string.contributor_openai_role), "https://openai.com/codex");
+        addProject(card, true, "Claude", "",
+                getString(R.string.contributor_claude_role), "https://claude.ai");
         addProject(card, true, "1812z", "",
                 getString(R.string.contributor_1812z_role), "https://github.com/1812z");
         addProject(card, true, "Nshpiter", "",

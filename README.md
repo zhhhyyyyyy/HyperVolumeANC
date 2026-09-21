@@ -116,6 +116,8 @@ app/src/main/java/io/github/hypervolumeanc/
 
 ## 感谢
 
+- [OpenAI Codex](https://openai.com/codex) —— 本模块大部分代码与界面由 Codex 实现
+- [Claude](https://claude.ai)（Anthropic）—— 代码与文案协助
 - [HyperChanger](https://github.com/ColdP/HyperChanger)（btm_m）—— 底部导航栏三种样式的实现直接来自该项目，Apache-2.0
 - [AndroidLiquidGlass](https://github.com/Kyant0/AndroidLiquidGlass)（Kyant0）—— 底栏的玻璃质感渲染
 - [MIUIX](https://github.com/compose-miuix-ui/miuix) —— HyperOS 风格组件库

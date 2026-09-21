@@ -134,6 +134,8 @@
     <!-- 贡献者 -->
     <string name="contributors_intro">感谢以下开发者为 HyperVolumeANC 提供实现与参考。</string>
     <string name="contributor_self_role">HyperVolumeANC 开发者</string>
+    <string name="contributor_openai_role">本模块大部分代码与界面由 Codex 实现</string>
+    <string name="contributor_claude_role">Anthropic · 代码与文案协助</string>
     <string name="contributor_1812z_role">OppoPods 作者 · OPPO 耳机兼容</string>
     <string name="contributor_nshpiter_role">HuaweiPods 作者 · Huawei 耳机兼容</string>
     <string name="contributor_mercury_role">SonyPods 作者 · Sony 耳机兼容</string>
