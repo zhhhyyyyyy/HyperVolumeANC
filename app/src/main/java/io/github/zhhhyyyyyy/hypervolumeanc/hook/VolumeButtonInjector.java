@@ -373,6 +373,9 @@ final class VolumeButtonInjector {
 
         void updateExpanded(boolean expanded, boolean force) {
             this.expanded = expanded;
+            Log.d(TAG, "expand=" + expanded + " dialog=" + needShowDialog()
+                    + " available=" + available
+                    + " row=" + ancRow.getWidth() + "x" + ancRow.getHeight());
             invoke(ancHelper, "onExpanded", new Class<?>[]{boolean.class, boolean.class},
                     expanded, force);
             invoke(actionHelper, "onExpanded", new Class<?>[]{boolean.class, boolean.class},
@@ -477,24 +480,8 @@ final class VolumeButtonInjector {
             nativeExpandedExtraHeight = extraHeight();
             syncDividerSize();
             updateActionStyle();
-            syncAncRowSize();
             updatePanelHeight();
             host.requestLayout();
-        }
-
-        /**
-         * 展开状态下把新增那一行按原生尺寸摆好：普通面板与控制中心的按钮宽度、
-         * 行高和滑块宽度都不一样，展开动画随后会用原生行覆盖这些值。
-         */
-        private void syncAncRowSize() {
-            if (!available || !expanded) {
-                return;
-            }
-            int width = buttonWidth();
-            int height = rowHeight();
-            setSize(ancBlur, width, height);
-            setSize(ancStandard, width, height);
-            setSize(ancRow, width + actionMargin() + actionWidth(), height);
         }
 
         private void refreshPanelGeometry() {
@@ -537,6 +524,12 @@ final class VolumeButtonInjector {
             View shadow = find(panel, "shadow");
             int extra = available ? extraHeight() : 0;
             int backgroundHeight = panelBaseHeight() + extra;
+            Log.d(TAG, "panel height dialog=" + needShowDialog() + " base=" + panelBaseHeight()
+                    + " extra=" + extra
+                    + " bg=" + (background != null ? background.getHeight() : -1)
+                    + " shadow=" + (shadow != null ? shadow.getHeight() : -1)
+                    + " row=" + ancRow.getWidth() + "x" + ancRow.getHeight()
+                    + " panel=" + panel.getClass().getSimpleName());
             setHeight(background, backgroundHeight);
             setHeight(shadow, backgroundHeight + shadowPaddingTop + shadowPaddingBottom);
         }
@@ -571,13 +564,6 @@ final class VolumeButtonInjector {
             return needShowDialog()
                     ? dimension(context, "o3_miui_ringer_btn_height_expended", 56)
                     : dimension(context, "o3_miui_ringer_btn_height_cc", 60);
-        }
-
-        /** 实例按钮本身的宽度：展开的普通面板 56dp，控制中心 60dp。 */
-        private int buttonWidth() {
-            return needShowDialog()
-                    ? dimension(context, "o3_miui_ringer_btn_width_expended", 56)
-                    : dimension(context, "o3_miui_ringer_btn_width_cc", 60);
         }
 
         /** 「断开连接」所在滑块宽度，跟随原生 timer 滑块：152 / 206（四列）/ 204（控制中心）。 */

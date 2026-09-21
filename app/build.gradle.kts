@@ -12,8 +12,8 @@ android {
         applicationId = "io.github.zhhhyyyyyy.hypervolumeanc"
         minSdk = 34
         targetSdk = 36
-        versionCode = 31
-        versionName = "1.5.11"
+        versionCode = 32
+        versionName = "1.5.12"
     }
 
     buildTypes {
