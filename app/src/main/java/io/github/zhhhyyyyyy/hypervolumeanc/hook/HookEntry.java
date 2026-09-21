@@ -249,8 +249,8 @@ public final class HookEntry extends XposedModule {
                     .setExceptionMode(XposedInterface.ExceptionMode.PROTECTIVE)
                     .intercept(chain -> {
                         Object result = chain.proceed();
+                        // 只看是否展开：普通音量条和控制中心面板都要为我们多出来的那一行加高背景。
                         if (result instanceof Integer height
-                                && Boolean.TRUE.equals(chain.getArg(1))
                                 && Boolean.TRUE.equals(chain.getArg(2))) {
                             return height + VolumeButtonInjector.expandedHeightExtra();
                         }

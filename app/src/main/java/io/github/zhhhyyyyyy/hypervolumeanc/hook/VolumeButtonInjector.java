@@ -266,10 +266,8 @@ final class VolumeButtonInjector {
         private final TextView actionText;
         private final Object ancHelper;
         private final Object actionHelper;
-        private final int actionWidth;
-        private final int expandedRowHeight;
-        private final int dividerHeight;
-        private final int expandedPanelHeight;
+        private final android.content.Context context;
+        private final FrameLayout.LayoutParams actionParams;
         private final int shadowPaddingTop;
         private final int shadowPaddingBottom;
 
@@ -295,7 +293,7 @@ final class VolumeButtonInjector {
             this.divider = divider;
             this.ancRow = ancRow;
 
-            Context context = host.getContext();
+            this.context = host.getContext();
             this.ancBlur = required(ancRow, "bg_blur");
             this.ancStandard = required(ancRow, "miui_standard_btn");
             this.ancIcon = (ImageView) required(ancRow, "icon");
@@ -315,20 +313,12 @@ final class VolumeButtonInjector {
 
             ViewGroup timer = (ViewGroup) timerLayout;
             timer.removeAllViews();
-            int actionMargin = dimension(context, "miui_volume_timer_margin_left", 12);
-            this.actionWidth = dimension(context, "miui_volume_timer_seekbar_width", 152);
-            this.expandedRowHeight = dimension(context, "o3_miui_ringer_btn_height_expended", 56);
-            this.dividerHeight = dimension(context, "o3_miui_volume_ringer_divider_height", 14);
-            nativeExpandedExtraHeight = expandedRowHeight + dividerHeight;
-            this.expandedPanelHeight = dimension(
-                    context, "o3_miui_volume_background_height_expanded", 344);
             this.shadowPaddingTop = dimension(
                     context, "miui_volume_shadow_padding_top_expanded", 42);
             this.shadowPaddingBottom = dimension(
                     context, "miui_volume_shadow_padding_bottom_expanded", 168);
-            FrameLayout.LayoutParams actionParams = new FrameLayout.LayoutParams(
-                    actionWidth, expandedRowHeight);
-            actionParams.setMarginStart(actionMargin);
+            this.actionParams = new FrameLayout.LayoutParams(actionWidth(), rowHeight());
+            this.actionParams.setMarginStart(actionMargin());
             timer.addView(actionRow, actionParams);
 
             this.actionIcon.setVisibility(View.GONE);
@@ -371,6 +361,7 @@ final class VolumeButtonInjector {
             this.available = available;
             this.includeOffMode = includeOff;
             nativeRowAvailable = available;
+            nativeExpandedExtraHeight = extraHeight();
             ancRow.setVisibility(available ? View.VISIBLE : View.GONE);
             divider.setVisibility(available ? View.VISIBLE : View.GONE);
             if (available) {
@@ -424,7 +415,7 @@ final class VolumeButtonInjector {
 
             int gap = nativeDivider.getHeight();
             if (gap <= 0) {
-                gap = dividerHeight;
+                gap = dividerGap();
             }
             int left = dndRow.getLeft();
             int top = dndRow.getBottom() + gap;
@@ -468,9 +459,13 @@ final class VolumeButtonInjector {
             invoke(actionHelper, "updateState", new Class<?>[0]);
             actionIcon.setVisibility(View.GONE);
             actionText.setTextColor(color(host.getContext(), "vp_o3_silent_off", 0xFFFFFFFF));
-            setSize(actionStandard, actionWidth, expandedRowHeight);
-            setSize(actionBlur, actionWidth, expandedRowHeight);
-            setSize(actionRow, actionWidth, expandedRowHeight);
+            int width = actionWidth();
+            int height = rowHeight();
+            actionParams.setMarginStart(actionMargin());
+            actionRow.setLayoutParams(actionParams);
+            setSize(actionStandard, width, height);
+            setSize(actionBlur, width, height);
+            setSize(actionRow, width, height);
         }
 
         private void applyNativeLayout() {
@@ -479,10 +474,27 @@ final class VolumeButtonInjector {
             }
             setWrapContentHeight(host);
             setWrapContentHeight(stateLayout);
+            nativeExpandedExtraHeight = extraHeight();
             syncDividerSize();
             updateActionStyle();
+            syncAncRowSize();
             updatePanelHeight();
             host.requestLayout();
+        }
+
+        /**
+         * 展开状态下把新增那一行按原生尺寸摆好：普通面板与控制中心的按钮宽度、
+         * 行高和滑块宽度都不一样，展开动画随后会用原生行覆盖这些值。
+         */
+        private void syncAncRowSize() {
+            if (!available || !expanded) {
+                return;
+            }
+            int width = buttonWidth();
+            int height = rowHeight();
+            setSize(ancBlur, width, height);
+            setSize(ancStandard, width, height);
+            setSize(ancRow, width + actionMargin() + actionWidth(), height);
         }
 
         private void refreshPanelGeometry() {
@@ -519,13 +531,109 @@ final class VolumeButtonInjector {
             if (!expanded) {
                 return;
             }
-            View root = host.getRootView();
-            View background = find(root, "blur_frame");
-            View shadow = find(root, "shadow");
-            int extra = available ? expandedRowHeight + dividerHeight : 0;
-            int backgroundHeight = expandedPanelHeight + extra;
+            // 只在音量面板自身的子树里找背景，避免控制中心窗口里同名的其它 blur_frame。
+            View panel = panelRoot();
+            View background = find(panel, "blur_frame");
+            View shadow = find(panel, "shadow");
+            int extra = available ? extraHeight() : 0;
+            int backgroundHeight = panelBaseHeight() + extra;
             setHeight(background, backgroundHeight);
             setHeight(shadow, backgroundHeight + shadowPaddingTop + shadowPaddingBottom);
+        }
+
+        /**
+         * 音量面板的布局根：MiuiRingerModeLayout → MiuiVolumeDialogView → VolumePanelView，
+         * 后者才同时含有 blur_frame 与 shadow 两个背景视图。
+         */
+        private View panelRoot() {
+            View parent = host.getParent() instanceof View view ? view : null;
+            if (parent != null && parent.getParent() instanceof View grandParent) {
+                return grandParent;
+            }
+            return parent != null ? parent : host.getRootView();
+        }
+
+        /** 普通音量条（true）还是控制中心里的音量面板（false），原生用它切换整套尺寸。 */
+        private boolean needShowDialog() {
+            Object value = readField(host, "mNeedShowDialog");
+            return value instanceof Boolean dialog ? dialog : true;
+        }
+
+        /** 插件里 Util.sIsNotificationSingle：通知音量独立控制时二级菜单有四个音量列。 */
+        private boolean notificationSingle() {
+            Object value = readStaticField(
+                    "com.android.systemui.miui.volume.Util", "sIsNotificationSingle");
+            return value instanceof Boolean single && single;
+        }
+
+        /** 一行实例按钮的高度：展开的普通面板 56dp，控制中心 60dp。 */
+        private int rowHeight() {
+            return needShowDialog()
+                    ? dimension(context, "o3_miui_ringer_btn_height_expended", 56)
+                    : dimension(context, "o3_miui_ringer_btn_height_cc", 60);
+        }
+
+        /** 实例按钮本身的宽度：展开的普通面板 56dp，控制中心 60dp。 */
+        private int buttonWidth() {
+            return needShowDialog()
+                    ? dimension(context, "o3_miui_ringer_btn_width_expended", 56)
+                    : dimension(context, "o3_miui_ringer_btn_width_cc", 60);
+        }
+
+        /** 「断开连接」所在滑块宽度，跟随原生 timer 滑块：152 / 206（四列）/ 204（控制中心）。 */
+        private int actionWidth() {
+            if (!needShowDialog()) {
+                return dimension(context, "miui_volume_timer_seekbar_width_cc", 204);
+            }
+            return notificationSingle()
+                    ? dimension(context, "miui_volume_timer_seekbar_width_4stream", 206)
+                    : dimension(context, "miui_volume_timer_seekbar_width", 152);
+        }
+
+        private int actionMargin() {
+            return needShowDialog()
+                    ? dimension(context, "miui_volume_timer_margin_left", 12)
+                    : dimension(context, "miui_volume_timer_margin_left_cc", 16);
+        }
+
+        /** 新增那一行与原生按钮之间的间距，控制中心用的是 16dp 版本。 */
+        private int dividerGap() {
+            return needShowDialog()
+                    ? dimension(context, "o3_miui_volume_ringer_divider_height", 14)
+                    : dimension(context, "o3_miui_volume_ringer_divider_height_cc", 16);
+        }
+
+        /** 原生二级菜单背景的基准高度：普通面板 344dp，控制中心 403dp。 */
+        private int panelBaseHeight() {
+            return needShowDialog()
+                    ? dimension(context, "o3_miui_volume_background_height_expanded", 344)
+                    : dimension(context, "miui_volume_background_height_cc", 403);
+        }
+
+        private int extraHeight() {
+            return rowHeight() + dividerGap();
+        }
+
+        private Object readField(Object target, String name) {
+            try {
+                Field field = target.getClass().getDeclaredField(name);
+                field.setAccessible(true);
+                return field.get(target);
+            } catch (Throwable error) {
+                return null;
+            }
+        }
+
+        private Object readStaticField(String className, String fieldName) {
+            try {
+                Class<?> type = Class.forName(
+                        className, false, host.getClass().getClassLoader());
+                Field field = type.getDeclaredField(fieldName);
+                field.setAccessible(true);
+                return field.get(null);
+            } catch (Throwable error) {
+                return null;
+            }
         }
 
         private View required(View root, String name) throws Resources.NotFoundException {
