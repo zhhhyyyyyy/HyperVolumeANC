@@ -18,7 +18,7 @@ import android.widget.TextView;
 final class AboutPage {
     private static final String DEVELOPER_NAME = "zhhhyyyyyy";
     private static final String DEVELOPER_URL = "https://github.com/zhhhyyyyyy";
-    private static final String TELEGRAM_URL = "https://t.me/HyperVolumANC";
+    private static final String TELEGRAM_URL = "https://t.me/+yCcx0sOHbMQyNTI1";
     private static final String MIUIX_URL = "https://compose-miuix-ui.github.io/miuix/";
 
     private AboutPage() {

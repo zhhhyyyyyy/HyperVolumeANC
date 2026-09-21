@@ -21,6 +21,11 @@ Android 17 with Xiaomi HyperOS 4 Beta, using libxposed API 102 (LSPosed).
 
 The module has only been tested on the developer's Xiaomi 17 Pro Max and Redmi K90 Pro Max (HyperOS 4). Other models and international builds may behave differently — feedback is welcome.
 
+## Download
+
+- Grab the latest APK from [Releases](https://github.com/zhhhyyyyyy/HyperVolumeANC/releases/latest), then enable the module in LSPosed and check both scopes below
+- “Settings → Update module” reads [update.json](https://raw.githubusercontent.com/zhhhyyyyyy/HyperVolumeANC/main/update.json) from the repository and can jump straight to the download when a new version is out
+
 ## Before you start
 
 Enable HyperVolumeANC in [LSPosed](https://github.com/LSPosed/LSPosed) with both scopes checked:
@@ -46,7 +51,7 @@ Headsets that only toggle noise cancelling without transparency (for example HUA
 - **Module status check** — the settings page probes both scopes and reports live whether the module is loaded
 - **Restart scopes** — restart both scoped processes from the top right corner, no phone reboot needed
 - **Appearance** — language (system / 简体中文 / English), theme (light / dark / system) and bottom bar style (HyperOS bar / floating bar / liquid glass bar)
-- **Update check** — check for new versions from the settings page; shows “no update feed yet” until a feed is published
+- **Update check** — check for new versions from the settings page and jump straight to the download when one is available
 
 ## Supported headsets
 
@@ -96,7 +101,7 @@ app/src/main/java/io/github/hypervolumeanc/
 
 ## Community
 
-- Telegram group: [HyperVolumANC](https://t.me/HyperVolumANC)
+- Telegram group: [HyperVolumeANC](https://t.me/+yCcx0sOHbMQyNTI1)
 - Bug reports: [GitHub Issues](https://github.com/zhhhyyyyyy/HyperVolumeANC/issues)
 
 Please make sure the module is enabled in LSPosed with both scopes checked, and attach the `HyperVolumeANC` lines from the LSPosed log — it makes debugging much faster.

@@ -21,6 +21,11 @@ Android 17 的小米澎湃 OS 4 Beta，模块基于 libxposed API 102（LSPosed�
 
 目前仅在开发者的小米 17 Pro Max 与红米 K90 Pro Max（小米澎湃 OS 4）上做过完整测试，其它机型与国外地区版本可能存在差异，欢迎反馈。
 
+## 下载
+
+- 从 [Releases](https://github.com/zhhhyyyyyy/HyperVolumeANC/releases/latest) 下载最新 APK，安装后在 LSPosed 中启用模块，并勾选下面两个作用域
+- 应用内「设置 → 更新模块」会读取仓库里的 [update.json](https://raw.githubusercontent.com/zhhhyyyyyy/HyperVolumeANC/main/update.json) 检查新版本，发现更新可以直接跳转下载
+
 ## 使用前说明
 
 请在 [LSPosed](https://github.com/LSPosed/LSPosed) 中启用 HyperVolumeANC，作用域需要同时勾选：
@@ -46,7 +51,7 @@ Sony、Huawei、OPPO 耳机需要额外安装对应的第三方模块，本模�
 - **模块状态检测** —— 设置页会向两个作用域发探测请求，实时显示是否已连接，而不是沿用旧状态
 - **重启作用域** —— 右上角一键重启两个作用域进程，修改或更新后无需重启手机
 - **外观选项** —— 语言（跟随系统 / 简体中文 / English）、主题（浅色 / 深色 / 跟随系统）、底部导航栏样式（HyperOS 底栏 / 悬浮底栏 / 液态玻璃底栏）
-- **更新检查** —— 设置页可检查新版本，更新源尚未发布时会明确显示为「尚未发布更新地址」
+- **更新检查** —— 设置页可检查新版本，发现新版本后直接跳转下载页
 
 ## 支持的耳机
 
@@ -98,7 +103,7 @@ app/src/main/java/io/github/hypervolumeanc/
 
 ## 交流 & 反馈
 
-- Telegram 群组：[HyperVolumANC](https://t.me/HyperVolumANC)
+- Telegram 群组：[HyperVolumeANC](https://t.me/+yCcx0sOHbMQyNTI1)
 - 问题反馈：[GitHub Issues](https://github.com/zhhhyyyyyy/HyperVolumeANC/issues)
 
 反馈前请先确认 LSPosed 已启用模块、两个作用域都已勾选，并附上 LSPosed 日志里 `HyperVolumeANC` 相关的行，定位会快很多。

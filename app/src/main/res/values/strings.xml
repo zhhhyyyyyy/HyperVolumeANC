@@ -95,7 +95,7 @@
     <string name="update_error">检查更新失败：%1$s</string>
     <string name="update_open_download">前往下载</string>
     <string name="update_recheck">重新检查</string>
-    <string name="update_url"></string>
+    <string name="update_url">https://raw.githubusercontent.com/zhhhyyyyyy/HyperVolumeANC/main/update.json</string>
 
     <!-- 关于 -->
     <string name="about_tagline">版本 %1$s · 测试于小米澎湃 OS 4</string>
@@ -109,7 +109,7 @@
     <string name="about_project_link">本项目链接</string>
     <string name="about_project_placeholder">尚未发布，敬请期待</string>
     <string name="about_telegram">Telegram 群组</string>
-    <string name="about_telegram_summary">@HyperVolumANC · 点击加入</string>
+    <string name="about_telegram_summary">HyperVolumeANC · 点击加入</string>
     <string name="about_framework">模块框架</string>
     <string name="about_framework_summary">libxposed API 102（LSPosed）</string>
     <string name="about_miuix">本项目基于 MIUIX 构建</string>
@@ -153,9 +153,9 @@
     <string name="oobe_developer_project_title">本项目链接</string>
     <string name="oobe_developer_project_placeholder">尚未发布，敬请期待</string>
     <string name="oobe_developer_telegram_title">Telegram 群组</string>
-    <string name="oobe_developer_telegram">https://t.me/HyperVolumANC</string>
+    <string name="oobe_developer_telegram">https://t.me/+yCcx0sOHbMQyNTI1</string>
     <string name="oobe_terms_title">条款与声明</string>
-    <string name="oobe_terms_body">1. HyperVolumeANC 是运行在 LSPosed 上的本地模块，只修改本机音量面板的显示与耳机控制行为，不会联网，也不收集、上传任何个人信息。\n\n2. 使用前请在 LSPosed 中启用本模块，并勾选“系统界面（com.android.systemui）”与“蓝牙扩展（com.xiaomi.bluetooth）”两个作用域，否则音量面板不会出现降噪按钮。\n\n3. 小米耳机与 AirPods 由系统原生支持；Sony、Huawei、OPPO 耳机分别依赖 SonyPods、HuaweiPods、OppoPods 等第三方模块，请同时遵守这些项目的许可与使用条款。\n\n4. 本模块按“现状”提供，不附带任何担保。刷机、模块冲突、系统升级都可能造成异常，请在了解风险的前提下使用。\n\n5. 重新安装或清除应用数据后，需要重新阅读并同意本条款。</string>
+    <string name="oobe_terms_body">1. HyperVolumeANC 是运行在 LSPosed 上的本地模块，只修改本机音量面板的显示与耳机控制行为；除检查更新时会访问本项目的更新地址外不会联网，也不收集、上传任何个人信息。\n\n2. 使用前请在 LSPosed 中启用本模块，并勾选“系统界面（com.android.systemui）”与“蓝牙扩展（com.xiaomi.bluetooth）”两个作用域，否则音量面板不会出现降噪按钮。\n\n3. 小米耳机与 AirPods 由系统原生支持；Sony、Huawei、OPPO 耳机分别依赖 SonyPods、HuaweiPods、OppoPods 等第三方模块，请同时遵守这些项目的许可与使用条款。\n\n4. 本模块按“现状”提供，不附带任何担保。刷机、模块冲突、系统升级都可能造成异常，请在了解风险的前提下使用。\n\n5. 重新安装或清除应用数据后，需要重新阅读并同意本条款。</string>
     <string name="oobe_terms_agree">我已阅读并同意上述条款</string>
     <string name="oobe_done_title">一切就绪</string>
     <string name="oobe_done_summary">模块开关与支持的耳机在“主页”，模块状态与外观设置、应用信息在“设置”页，关于信息在“关于”页。如果音量面板没有出现降噪按钮，请确认作用域已勾选，并重启一次作用域或手机。</string>

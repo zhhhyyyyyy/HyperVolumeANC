@@ -94,7 +94,7 @@
     <string name="update_error">Update check failed: %1$s</string>
     <string name="update_open_download">Open download</string>
     <string name="update_recheck">Check again</string>
-    <string name="update_url"></string>
+    <string name="update_url">https://raw.githubusercontent.com/zhhhyyyyyy/HyperVolumeANC/main/update.json</string>
 
     <!-- About -->
     <string name="about_tagline">Version %1$s · tested on Xiaomi HyperOS 4</string>
@@ -108,7 +108,7 @@
     <string name="about_project_link">Project link</string>
     <string name="about_project_placeholder">Not published yet</string>
     <string name="about_telegram">Telegram group</string>
-    <string name="about_telegram_summary">@HyperVolumANC · tap to join</string>
+    <string name="about_telegram_summary">HyperVolumeANC · tap to join</string>
     <string name="about_framework">Module framework</string>
     <string name="about_framework_summary">libxposed API 102 (LSPosed)</string>
     <string name="about_miuix">Built on MIUIX</string>
@@ -152,9 +152,9 @@
     <string name="oobe_developer_project_title">Project link</string>
     <string name="oobe_developer_project_placeholder">Not published yet</string>
     <string name="oobe_developer_telegram_title">Telegram group</string>
-    <string name="oobe_developer_telegram">https://t.me/HyperVolumANC</string>
+    <string name="oobe_developer_telegram">https://t.me/+yCcx0sOHbMQyNTI1</string>
     <string name="oobe_terms_title">Terms and notices</string>
-    <string name="oobe_terms_body">1. HyperVolumeANC is a local module that runs on LSPosed. It only changes how the volume panel looks and how headsets are controlled on this device. It never connects to the network and never collects or uploads personal data.\n\n2. Enable the module in LSPosed and check the “System UI (com.android.systemui)” and “Bluetooth extension (com.xiaomi.bluetooth)” scopes, otherwise the noise control button will not appear in the volume panel.\n\n3. Xiaomi earbuds and AirPods are supported by the system itself. Sony, Huawei and OPPO headsets rely on third party modules such as SonyPods, HuaweiPods and OppoPods; their licences and terms also apply.\n\n4. This module is provided “as is” without any warranty. Flashing, module conflicts and system updates can all cause problems, so please use it with that in mind.\n\n5. After reinstalling or clearing app data you will be asked to read and accept these terms again.</string>
+    <string name="oobe_terms_body">1. HyperVolumeANC is a local module that runs on LSPosed. It only changes how the volume panel looks and how headsets are controlled on this device. It only reaches the network to check for updates and never collects or uploads personal data.\n\n2. Enable the module in LSPosed and check the “System UI (com.android.systemui)” and “Bluetooth extension (com.xiaomi.bluetooth)” scopes, otherwise the noise control button will not appear in the volume panel.\n\n3. Xiaomi earbuds and AirPods are supported by the system itself. Sony, Huawei and OPPO headsets rely on third party modules such as SonyPods, HuaweiPods and OppoPods; their licences and terms also apply.\n\n4. This module is provided “as is” without any warranty. Flashing, module conflicts and system updates can all cause problems, so please use it with that in mind.\n\n5. After reinstalling or clearing app data you will be asked to read and accept these terms again.</string>
     <string name="oobe_terms_agree">I have read and accept the terms above</string>
     <string name="oobe_done_title">All set</string>
     <string name="oobe_done_summary">Module switches and supported headsets live in Home, module status, appearance and app info in Settings, and the credits in About. If the noise control button does not show up in the volume panel, check the scopes and restart the scopes or the phone once.</string>
