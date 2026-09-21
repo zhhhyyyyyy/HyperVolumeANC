@@ -40,6 +40,7 @@ public final class MainActivity extends ComponentActivity {
     private static final String HUAWEI_PODS_URL = "https://github.com/Nshpiter/HuaweiPods";
     private static final String SONY_PODS_URL = "https://github.com/Mercury000/SonyPods";
     private static final String OPPO_PODS_URL = "https://github.com/1812z/OppoPods";
+    private static final String OPPO_PODS_UPSTREAM_URL = "https://github.com/Leaf-lsgtky/OppoPods";
 
     private static final String[] LANGUAGE_VALUES = {
             Settings.LANGUAGE_SYSTEM, Settings.LANGUAGE_ZH, Settings.LANGUAGE_EN};
@@ -56,6 +57,8 @@ public final class MainActivity extends ComponentActivity {
 
     private Switch moduleSwitch;
     private Switch cycleSwitch;
+    private Switch islandSwitch;
+    private Switch hideIconSwitch;
     private TextView cycleSummary;
     private TextView statusSummary;
     private TextView statusHint;
@@ -304,6 +307,8 @@ public final class MainActivity extends ComponentActivity {
         pageContents[TAB_SETTINGS] = content;
         content.addView(Ui.groupTitle(this, getString(R.string.settings_group_status)));
         content.addView(buildStatusCard());
+        content.addView(Ui.groupTitle(this, getString(R.string.settings_group_module)));
+        content.addView(buildBehaviourCard());
         content.addView(Ui.groupTitle(this, getString(R.string.settings_group_appearance)));
         content.addView(buildAppearanceCard());
         content.addView(Ui.groupTitle(this, getString(R.string.settings_group_update)));
@@ -317,6 +322,36 @@ public final class MainActivity extends ComponentActivity {
         updateSummary = findSummary(row);
         row.setOnClickListener(view -> UpdateDialog.show(this));
         card.addView(row);
+        return card;
+    }
+
+    /** 通知提示与桌面图标这两项不影响降噪本身，单独放在「模块行为」里。 */
+    private LinearLayout buildBehaviourCard() {
+        LinearLayout card = Ui.card(this);
+
+        islandSwitch = new Switch(this);
+        islandSwitch.setOnCheckedChangeListener((button, checked) -> {
+            if (binding) {
+                return;
+            }
+            Settings.setIslandNotification(this, checked);
+            refreshState();
+        });
+        card.addView(Ui.row(this, getString(R.string.settings_island_title),
+                getString(R.string.settings_island_summary), islandSwitch, false));
+        Ui.addDivider(card);
+
+        hideIconSwitch = new Switch(this);
+        hideIconSwitch.setOnCheckedChangeListener((button, checked) -> {
+            if (binding) {
+                return;
+            }
+            Settings.setLauncherIconHidden(this, checked);
+            refreshState();
+        });
+        card.addView(Ui.row(this, getString(R.string.settings_hide_icon_title),
+                getString(R.string.settings_hide_icon_summary), hideIconSwitch, false));
+        card.addView(Ui.hint(this, getString(R.string.settings_hide_icon_hint)));
         return card;
     }
 
@@ -487,9 +522,29 @@ public final class MainActivity extends ComponentActivity {
         card.addView(moduleRow(R.drawable.ic_brand_huawei, getString(R.string.device_huawei),
                 "HuaweiPods", HUAWEI_PODS_URL));
         Ui.addDivider(card);
-        card.addView(moduleRow(R.drawable.ic_brand_oppo, getString(R.string.device_oppo),
-                "OppoPods", OPPO_PODS_URL));
+        card.addView(oppoModuleRow());
         return card;
+    }
+
+    /**
+     * OppoPods 有上游与分支两个项目，先弹出二次选择再打开对应主页，用作者头像区分。
+     */
+    private View oppoModuleRow() {
+        View row = Ui.row(this, R.drawable.ic_brand_oppo, getString(R.string.device_oppo), null,
+                getString(R.string.device_oppo_pick_summary), Ui.chevron(this), true);
+        row.setOnClickListener(view -> ProjectPickerDialog.show(this,
+                getString(R.string.oppopods_pick_title),
+                getString(R.string.oppopods_pick_summary),
+                new ProjectPickerDialog.Entry[]{
+                        new ProjectPickerDialog.Entry(R.drawable.avatar_leaf_lsgtky,
+                                "Leaf-lsgtky",
+                                getString(R.string.oppopods_pick_leaf_summary),
+                                OPPO_PODS_UPSTREAM_URL),
+                        new ProjectPickerDialog.Entry(R.drawable.avatar_1812z,
+                                "1812z",
+                                getString(R.string.oppopods_pick_1812z_summary),
+                                OPPO_PODS_URL)}));
+        return row;
     }
 
     private View moduleRow(int iconRes, String title, String moduleName, String url) {
@@ -510,6 +565,8 @@ public final class MainActivity extends ComponentActivity {
         boolean includeOff = Settings.cycleIncludesOff(this);
         moduleSwitch.setChecked(enabled);
         cycleSwitch.setChecked(includeOff);
+        islandSwitch.setChecked(Settings.islandNotification(this));
+        hideIconSwitch.setChecked(Settings.launcherIconHidden(this));
         binding = false;
 
         cycleSummary.setText(enabled

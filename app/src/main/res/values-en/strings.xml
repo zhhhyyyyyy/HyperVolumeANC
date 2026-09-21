@@ -41,6 +41,11 @@
     <string name="device_huawei">Huawei headset</string>
     <string name="device_oppo">Oppo headset</string>
     <string name="device_needs_module">Requires the %1$s module, tap to open its repository</string>
+    <string name="device_oppo_pick_summary">Requires the OppoPods module, tap to pick an author’s project</string>
+    <string name="oppopods_pick_title">Choose an OppoPods project</string>
+    <string name="oppopods_pick_summary">Both projects share the same interface, so either one lets this module control noise cancelling; both are supported here.</string>
+    <string name="oppopods_pick_leaf_summary">Upstream OppoPods · original author</string>
+    <string name="oppopods_pick_1812z_summary">OppoPods fork · also fakes MIUI headset support</string>
 
     <!-- Settings -->
     <string name="settings_group_status">Module status</string>
@@ -50,6 +55,11 @@
     <string name="settings_scope_systemui">System UI</string>
     <string name="settings_scope_bluetooth">Bluetooth extension</string>
     <string name="settings_group_module">Module behaviour</string>
+    <string name="settings_island_title">Noise control notification</string>
+    <string name="settings_island_summary">Show a status bar island notice when switching noise cancelling or transparency; switching off stays silent</string>
+    <string name="settings_hide_icon_title">Hide launcher icon</string>
+    <string name="settings_hide_icon_summary">Hide the launcher icon; reopen the app from the module manager afterwards</string>
+    <string name="settings_hide_icon_hint">The launcher icon stays hidden until you turn this switch off again. You can still reach this page through the module settings entry in LSPosed / your module manager. Hiding the icon does not affect the volume panel or headset control.</string>
     <string name="settings_group_appearance">Appearance</string>
     <string name="settings_language">Language</string>
     <string name="settings_language_summary">Change the interface language. Some system components follow the system language.</string>
@@ -123,6 +133,7 @@
     <string name="license_lsposed_desc">Module API, remote preferences and service communication</string>
     <string name="license_librepods_desc">Reference for the AirPods listening mode icons</string>
     <string name="license_oppopods_desc">OPPO headset support on HyperOS</string>
+    <string name="license_oppopods_fork_desc">OppoPods fork that also fakes MIUI headset support inside the Bluetooth extension</string>
     <string name="license_huaweipods_desc">Huawei headset compatibility and control interface</string>
     <string name="license_sonypods_desc">Sony headset state and control interface</string>
     <string name="license_hyperchanger_desc">Bottom navigation bar (HyperOS / floating / liquid glass), Apache License 2.0</string>
@@ -135,7 +146,8 @@
     <string name="contributor_self_role">HyperVolumeANC developer</string>
     <string name="contributor_openai_role">Wrote most of the code and UI of this module</string>
     <string name="contributor_claude_role">Anthropic · code and copy assistance</string>
-    <string name="contributor_1812z_role">OppoPods author · OPPO headset support</string>
+    <string name="contributor_1812z_role">OppoPods fork author · OPPO headset support</string>
+    <string name="contributor_leaf_role">OppoPods author · OPPO headset support</string>
     <string name="contributor_nshpiter_role">HuaweiPods author · Huawei headset support</string>
     <string name="contributor_mercury_role">SonyPods author · Sony headset support</string>
     <string name="contributor_kavish_role">LibrePods author · AirPods protocol and icons</string>

@@ -18,7 +18,8 @@ Copyright 2026 zhhhyyyyyy
 以下项目仅作为实现参考，未直接引用其代码：
 
 - HyperCeiler (https://github.com/ReChronoRain/HyperCeiler)：关于页渐变背景与引导页版式参考
-- OppoPods (https://github.com/1812z/OppoPods)：OPPO 耳机广播接口
+- OppoPods (https://github.com/Leaf-lsgtky/OppoPods)：OPPO 耳机广播接口（上游项目）
+- OppoPods 1812z 分支 (https://github.com/1812z/OppoPods)：同一套 OPPO 耳机广播接口的分支实现
 - HuaweiPods (https://github.com/Nshpiter/HuaweiPods)：Huawei 耳机控制接口
 - SonyPods (https://github.com/Mercury000/SonyPods)：Sony 耳机状态接口
 - LibrePods (https://github.com/kavishdevar/librepods)：AirPods 模式图标参考
@@ -30,3 +31,6 @@ Copyright 2026 zhhhyyyyyy
   仅用于标识本模块所运行的框架。
 - app/src/main/res/drawable/ic_brand_openai.xml
   OpenAI 标记取自 Simple Icons（https://github.com/simple-icons/simple-icons），CC0-1.0。
+- app/src/main/res/drawable-nodpi/avatar_leaf_lsgtky.jpg、avatar_1812z.jpg
+  取自两位作者的 GitHub 头像（https://github.com/Leaf-lsgtky、https://github.com/1812z），
+  仅用于在主页标注其 OppoPods 项目，版权归作者所有。

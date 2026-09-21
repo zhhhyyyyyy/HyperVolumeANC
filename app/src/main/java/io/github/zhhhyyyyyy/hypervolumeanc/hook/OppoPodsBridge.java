@@ -17,6 +17,11 @@ import io.github.libxposed.api.XposedModule;
  * Runs inside the Bluetooth extension process. The OppoPods module publishes the
  * noise-control state of OPPO headsets to {@code com.xiaomi.bluetooth}, which this
  * bridge forwards to the volume panel running in SystemUI.
+ *
+ * <p>The upstream Leaf-lsgtky build and the 1812z fork share the package name
+ * {@code moe.chenxy.oppopods} and the {@code chen.action.oppopods.*} broadcast interface, so
+ * the same receiver serves both. The address carried by the forwarded state is what lets
+ * SystemUI accept an OPPO headset without depending on its (renamable) device name.
  */
 final class OppoPodsBridge {
     static final String ACTION_OPPO_ANC_CHANGED = "chen.action.oppopods.pods_anc_select";

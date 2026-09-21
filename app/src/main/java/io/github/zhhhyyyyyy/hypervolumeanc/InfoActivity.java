@@ -77,8 +77,11 @@ public final class InfoActivity extends Activity {
         addProject(card, true, "LibrePods", "",
                 getString(R.string.license_librepods_desc),
                 "https://github.com/kavishdevar/librepods");
-        addProject(card, true, "OppoPods", "2.1.0",
-                getString(R.string.license_oppopods_desc), "https://github.com/1812z/OppoPods");
+        addProject(card, true, "OppoPods", "1.2.3",
+                getString(R.string.license_oppopods_desc),
+                "https://github.com/Leaf-lsgtky/OppoPods");
+        addProject(card, true, "OppoPods · 1812z", "2.1.0",
+                getString(R.string.license_oppopods_fork_desc), "https://github.com/1812z/OppoPods");
         addProject(card, true, "HuaweiPods", "",
                 getString(R.string.license_huaweipods_desc),
                 "https://github.com/Nshpiter/HuaweiPods");
@@ -110,6 +113,9 @@ public final class InfoActivity extends Activity {
                 getString(R.string.contributor_openai_role), "https://openai.com/codex");
         addProject(card, true, "Claude", "",
                 getString(R.string.contributor_claude_role), "https://claude.ai");
+        addProject(card, true, "Leaf-lsgtky", "",
+                getString(R.string.contributor_leaf_role),
+                "https://github.com/Leaf-lsgtky");
         addProject(card, true, "1812z", "",
                 getString(R.string.contributor_1812z_role), "https://github.com/1812z");
         addProject(card, true, "Nshpiter", "",

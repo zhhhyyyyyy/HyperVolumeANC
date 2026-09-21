@@ -52,7 +52,8 @@ Headsets that only toggle noise cancelling without transparency (for example HUA
 - **Three states** — noise cancelling, transparency and off, with a choice between a two state (NC ⇄ transparency) and a three state (NC → transparency → off) cycle
 - **Matching icons** — ring for noise cancelling, dots for transparency, adaptive glyph for off, using the same palette as the rest of the volume panel
 - **Disconnect** — expanding the headset menu in the volume panel lets you disconnect the connected headset
-- **Focus notification** — switching to noise cancelling or transparency shows a status bar strong toast with the matching icon; switching off stays silent
+- **Focus notification** — switching to noise cancelling or transparency shows a status bar strong toast with the matching icon; switching off stays silent. Can be turned off in Settings
+- **Hide launcher icon** — removes the icon from the launcher; the app stays reachable through the module settings entry of your module manager
 - **Module status check** — the settings page probes both scopes and reports live whether the module is loaded
 - **Restart scopes** — restart both scoped processes from the top right corner, no phone reboot needed
 - **Appearance** — language (system / 简体中文 / English), theme (light / dark / system) and bottom bar style (HyperOS bar / floating bar / liquid glass bar)
@@ -66,14 +67,21 @@ Headsets that only toggle noise cancelling without transparency (for example HUA
 | Apple earbuds | Native | none |
 | Sony | Third party module | [SonyPods](https://github.com/Mercury000/SonyPods) |
 | Huawei | Third party module | [HuaweiPods](https://github.com/Nshpiter/HuaweiPods) |
-| OPPO | Third party module | [OppoPods](https://github.com/1812z/OppoPods) |
+| OPPO | Third party module | [OppoPods](https://github.com/Leaf-lsgtky/OppoPods) (Leaf-lsgtky) or the [1812z fork](https://github.com/1812z/OppoPods) |
+
+OppoPods is maintained by Leaf-lsgtky and 1812z is a fork of it. Both speak the same `chen.action.oppopods.*` broadcast interface and share the package name `moe.chenxy.oppopods`, so only one of them can be installed at a time and this module works with either:
+
+- The **1812z fork** fakes MIUI headset support inside the Bluetooth extension process, so `checkSupport` already returns the support string with the noise control bit and the headset is accepted right away, exactly as before.
+- The **upstream Leaf-lsgtky build** does not fake that string and only publishes headset state, so the headset is accepted once the module reports state for it. That decision uses the headset address carried by the broadcast, not the device name, so renamed earbuds are still recognised.
+
+In both cases, if the module has not reported state within the last two minutes (for example right after a SystemUI restart), the row shows up one step later on the first volume panel open while a fresh state is requested; after that it is immediate again.
 
 ## Interface
 
 The app has three tabs, and the bottom bar style can be switched in Settings:
 
-- **Home** — module switches, cycle option with a mode illustration, supported headsets
-- **Settings** — LSPosed connection status, language / theme / bottom bar style, update check
+- **Home** — module switches, cycle option with a mode illustration, supported headsets; the OPPO row opens a picker for either author's OppoPods project
+- **Settings** — LSPosed connection status, module behaviour (noise control notification, hide launcher icon), language / theme / bottom bar style, update check
 - **About** — big icon with an animated gradient, feature description, a note from the developer, project link, open source notices and contributors
 
 The first launch runs a four step guide (welcome → developer → terms → done); it can be replayed from the About tab.
@@ -104,6 +112,8 @@ app/src/main/java/io/github/hypervolumeanc/
 └── MainActivity   home / settings / about tabs
 ```
 
+Starting with 1.7.2 the version code is date based: `versionCode` = year, month, day and hour (`YYMMDDHH`, last two digits of the year — 2026-09-21 at 20:00 is `26092120`) instead of a running number. The release tag in the LSPosed repository uses `versionCode-versionName`, for example `26092120-1.7.2`.
+
 The `update.json` in the repository root is the feed used by the in-app update check — bump `VersionCode`, `VersionName`, `ReleaseNoteURL`, `APKURL` and `APKSize` together when publishing a new version.
 
 ## Community
@@ -121,7 +131,7 @@ Please make sure the module is enabled in LSPosed with both scopes checked, and 
 - [AndroidLiquidGlass](https://github.com/Kyant0/AndroidLiquidGlass) (Kyant0) — glass material rendering for the bar
 - [MIUIX](https://github.com/compose-miuix-ui/miuix) — HyperOS style component library
 - [HyperCeiler](https://github.com/ReChronoRain/HyperCeiler) — reference for the about page gradient and the onboarding layout
-- [OppoPods](https://github.com/1812z/OppoPods) (1812z), [HuaweiPods](https://github.com/Nshpiter/HuaweiPods) (Nshpiter), [SonyPods](https://github.com/Mercury000/SonyPods) (Mercury000)
+- [OppoPods](https://github.com/Leaf-lsgtky/OppoPods) (Leaf-lsgtky), the [1812z fork](https://github.com/1812z/OppoPods), [HuaweiPods](https://github.com/Nshpiter/HuaweiPods) (Nshpiter), [SonyPods](https://github.com/Mercury000/SonyPods) (Mercury000)
 - [LibrePods](https://github.com/kavishdevar/librepods) (kavishdevar) — listening mode icon reference
 
 See [NOTICE](NOTICE) for the full third party notices.

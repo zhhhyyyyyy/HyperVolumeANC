@@ -42,6 +42,11 @@
     <string name="device_huawei">Huawei 耳机</string>
     <string name="device_oppo">Oppo 耳机</string>
     <string name="device_needs_module">需安装 %1$s 模块，点击前往项目主页</string>
+    <string name="device_oppo_pick_summary">需安装 OppoPods 模块，点击选择作者的项目</string>
+    <string name="oppopods_pick_title">选择 OppoPods 项目</string>
+    <string name="oppopods_pick_summary">两个项目接口一致，装任意一个都能在本模块里控制降噪；本模块对二者都已适配。</string>
+    <string name="oppopods_pick_leaf_summary">OppoPods 上游版本 · 原作者</string>
+    <string name="oppopods_pick_1812z_summary">OppoPods 分支 · 额外伪装 MIUI 耳机支持</string>
 
     <!-- 设置 -->
     <string name="settings_group_status">模块状态</string>
@@ -51,6 +56,11 @@
     <string name="settings_scope_systemui">系统界面</string>
     <string name="settings_scope_bluetooth">蓝牙扩展</string>
     <string name="settings_group_module">模块行为</string>
+    <string name="settings_island_title">降噪 / 通透通知</string>
+    <string name="settings_island_summary">切换降噪或通透时用状态栏超级岛提示，切到关闭不会打扰</string>
+    <string name="settings_hide_icon_title">隐藏桌面图标</string>
+    <string name="settings_hide_icon_summary">隐藏启动器图标，隐藏后请从模块管理器打开</string>
+    <string name="settings_hide_icon_hint">隐藏后桌面不再显示本应用图标，仍可在 LSPosed / 模块管理器的模块设置里进入本页，在这里把开关关掉即可恢复。隐藏不会影响音量面板与耳机控制。</string>
     <string name="settings_group_appearance">外观</string>
     <string name="settings_language">语言</string>
     <string name="settings_language_summary">切换应用界面语言，部分系统组件会跟随系统语言。</string>
@@ -124,6 +134,7 @@
     <string name="license_lsposed_desc">模块 API、远程偏好设置与服务通信</string>
     <string name="license_librepods_desc">AirPods 模式图标绘制参考</string>
     <string name="license_oppopods_desc">OPPO 耳机在澎湃 OS 上的兼容实现</string>
+    <string name="license_oppopods_fork_desc">OppoPods 分支，额外在蓝牙扩展进程内伪装 MIUI 耳机支持</string>
     <string name="license_huaweipods_desc">Huawei 耳机兼容与控制接口</string>
     <string name="license_sonypods_desc">Sony 耳机状态与切换命令接口</string>
     <string name="license_hyperchanger_desc">底部导航栏（HyperOS 底栏 / 悬浮底栏 / 液态玻璃底栏）代码，Apache License 2.0</string>
@@ -136,7 +147,8 @@
     <string name="contributor_self_role">HyperVolumeANC 开发者</string>
     <string name="contributor_openai_role">本模块大部分代码与界面由 Codex 实现</string>
     <string name="contributor_claude_role">Anthropic · 代码与文案协助</string>
-    <string name="contributor_1812z_role">OppoPods 作者 · OPPO 耳机兼容</string>
+    <string name="contributor_1812z_role">OppoPods 分支作者 · OPPO 耳机兼容</string>
+    <string name="contributor_leaf_role">OppoPods 作者 · OPPO 耳机兼容</string>
     <string name="contributor_nshpiter_role">HuaweiPods 作者 · Huawei 耳机兼容</string>
     <string name="contributor_mercury_role">SonyPods 作者 · Sony 耳机兼容</string>
     <string name="contributor_kavish_role">LibrePods 作者 · AirPods 协议与图标</string>

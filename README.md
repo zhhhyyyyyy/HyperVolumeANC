@@ -52,7 +52,8 @@ Sony、Huawei、OPPO 耳机需要额外安装对应的第三方模块，本模�
 - **三种状态** —— 降噪、通透、关闭；可自行选择是「降噪 ⇄ 通透」两态循环，还是「降噪 → 通透 → 关闭」三态循环
 - **状态图标** —— 降噪是圆环、通透是光点、关闭是自适应图标，与音量面板其余元素同一套配色
 - **断开耳机** —— 展开音量面板的耳机菜单后，可直接断开当前连接的耳机
-- **超级岛提示** —— 切到降噪或通透时，通过状态栏强通知显示「降噪开启 / 通透开启」与对应图标，切到关闭不打扰
+- **超级岛提示** —— 切到降噪或通透时，通过状态栏强通知显示「降噪开启 / 通透开启」与对应图标，切到关闭不打扰；可在设置页关闭
+- **隐藏桌面图标** —— 隐藏启动器图标，桌面只留系统入口；隐藏后可从模块管理器的模块设置进入本应用
 - **模块状态检测** —— 设置页会向两个作用域发探测请求，实时显示是否已连接，而不是沿用旧状态
 - **重启作用域** —— 右上角一键重启两个作用域进程，修改或更新后无需重启手机
 - **外观选项** —— 语言（跟随系统 / 简体中文 / English）、主题（浅色 / 深色 / 跟随系统）、底部导航栏样式（HyperOS 底栏 / 悬浮底栏 / 液态玻璃底栏）
@@ -66,14 +67,21 @@ Sony、Huawei、OPPO 耳机需要额外安装对应的第三方模块，本模�
 | Apple 耳机 | 系统原生 | 无需额外模块 |
 | Sony 耳机 | 第三方模块 | [SonyPods](https://github.com/Mercury000/SonyPods) |
 | Huawei 耳机 | 第三方模块 | [HuaweiPods](https://github.com/Nshpiter/HuaweiPods) |
-| OPPO 耳机 | 第三方模块 | [OppoPods](https://github.com/1812z/OppoPods) |
+| OPPO 耳机 | 第三方模块 | [OppoPods](https://github.com/Leaf-lsgtky/OppoPods)（Leaf-lsgtky）/ [1812z 分支](https://github.com/1812z/OppoPods) |
+
+OppoPods 由 Leaf-lsgtky 维护，1812z 版本是它的分支，两者共用同一套 `chen.action.oppopods.*` 广播接口和同一个包名（`moe.chenxy.oppopods`），因此同一时间只能安装其中一个，本模块对二者都可用：
+
+- **1812z 分支** 会在蓝牙扩展进程内伪装 MIUI 耳机支持，`checkSupport` 直接返回带降噪位的支持串，本模块据此放行 OPPO 耳机，行为与之前一致。
+- **上游 Leaf-lsgtky 版本** 不伪装支持串，只广播耳机状态；本模块改为让模块上报状态后再放行 OPPO 耳机——判定依据是广播里携带的耳机地址，与耳机名称无关，所以改了耳机名字也能识别。
+
+两种情况下，若模块在最近两分钟内没有上报过状态（例如刚重启 SystemUI），第一次打开音量面板时降噪按钮会晚一步出现（此时正在向模块索取一次状态），拿到状态后即恢复。
 
 ## 界面
 
 应用分为三个标签页，底部导航栏可在设置中切换样式：
 
-- **主页** —— 模块开关、循环方式与模式示意、支持的耳机列表
-- **设置** —— LSPosed 连接状态、语言 / 主题 / 底栏样式、更新模块
+- **主页** —— 模块开关、循环方式与模式示意、支持的耳机列表；OPPO 一栏点开可在两个作者的 OppoPods 项目之间选择
+- **设置** —— LSPosed 连接状态、模块行为（降噪 / 通透通知、隐藏桌面图标）、语言 / 主题 / 底栏样式、更新模块
 - **关于** —— 大图标与渐变动效、功能说明、开发者的话、项目链接、开源代码声明与贡献者
 
 首次安装会进入四步引导（欢迎 → 开发者 → 条款 → 完成），「关于」页可以随时重新查看。
@@ -106,6 +114,8 @@ app/src/main/java/io/github/hypervolumeanc/
 
 模块侧不自行实现耳机协议：小米与 AirPods 走系统接口，Sony、Huawei、OPPO 分别走对应模块公开的广播接口。
 
+版本号自 1.7.2 起用日期命名：`versionCode` = 年月日时（`YYMMDDHH`，年份取后两位，例如 2026-09-21 20 点发布即 `26092120`），不再逐个递增；LSPosed 仓库的 release tag 用 `版本号-版本名`（如 `26092120-1.7.2`）。
+
 根目录的 `update.json` 是应用内更新检查读取的更新源，发布新版本时把 `VersionCode`、`VersionName`、`ReleaseNoteURL`、`APKURL` 与 `APKSize` 一起改掉即可。
 ## 交流 & 反馈
 
@@ -122,7 +132,7 @@ app/src/main/java/io/github/hypervolumeanc/
 - [AndroidLiquidGlass](https://github.com/Kyant0/AndroidLiquidGlass)（Kyant0）—— 底栏的玻璃质感渲染
 - [MIUIX](https://github.com/compose-miuix-ui/miuix) —— HyperOS 风格组件库
 - [HyperCeiler](https://github.com/ReChronoRain/HyperCeiler) —— 关于页渐变与引导页版式参考
-- [OppoPods](https://github.com/1812z/OppoPods)（1812z）、[HuaweiPods](https://github.com/Nshpiter/HuaweiPods)（Nshpiter）、[SonyPods](https://github.com/Mercury000/SonyPods)（Mercury000）
+- [OppoPods](https://github.com/Leaf-lsgtky/OppoPods)（Leaf-lsgtky）、[1812z 分支](https://github.com/1812z/OppoPods)（1812z）、[HuaweiPods](https://github.com/Nshpiter/HuaweiPods)（Nshpiter）、[SonyPods](https://github.com/Mercury000/SonyPods)（Mercury000）
 - [LibrePods](https://github.com/kavishdevar/librepods)（kavishdevar）—— 模式图标参考
 
 完整的第三方声明见 [NOTICE](NOTICE)。

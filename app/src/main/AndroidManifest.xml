@@ -23,13 +23,26 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/Theme.HyperVolumeANC">
-        <activity
-            android:name=".SplashActivity"
-            android:exported="true">
+        <!--
+            桌面入口单独放在别名上，隐藏桌面图标只需停用这个别名；模块设置入口仍留在
+            SplashActivity 上，隐藏后可以从 LSPosed / 模块管理器继续进入。
+        -->
+        <activity-alias
+            android:name=".LauncherActivity"
+            android:enabled="true"
+            android:exported="true"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/app_name"
+            android:roundIcon="@mipmap/ic_launcher"
+            android:targetActivity=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity-alias>
+        <activity
+            android:name=".SplashActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="de.robv.android.xposed.category.MODULE_SETTINGS" />

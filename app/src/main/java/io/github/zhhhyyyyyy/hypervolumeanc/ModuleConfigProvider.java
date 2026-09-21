@@ -14,6 +14,7 @@ public final class ModuleConfigProvider extends ContentProvider {
     public static final String METHOD_GET = "get";
     public static final String EXTRA_MODULE_ENABLED = "module_enabled";
     public static final String EXTRA_CYCLE_INCLUDE_OFF = "cycle_include_off";
+    public static final String EXTRA_ISLAND_NOTIFICATION = "island_notification";
 
     @Override
     public boolean onCreate() {
@@ -29,6 +30,7 @@ public final class ModuleConfigProvider extends ContentProvider {
         }
         result.putBoolean(EXTRA_MODULE_ENABLED, Settings.moduleEnabled(context));
         result.putBoolean(EXTRA_CYCLE_INCLUDE_OFF, Settings.cycleIncludesOff(context));
+        result.putBoolean(EXTRA_ISLAND_NOTIFICATION, Settings.islandNotification(context));
         return result;
     }
 

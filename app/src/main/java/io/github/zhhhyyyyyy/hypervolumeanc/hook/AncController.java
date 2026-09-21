@@ -15,6 +15,8 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Parcel;
+import android.os.SystemClock;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.provider.Settings;
 import android.util.Base64;
@@ -24,6 +26,9 @@ import android.widget.Toast;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Method;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -68,6 +73,14 @@ final class AncController {
     private static final String OPPO_REFRESH_ACTION = "chen.action.oppopods.refresh_status";
     private static final String OPPO_STATUS_EXTRA = "status";
     private static final String OPPO_ADDRESS_EXTRA = "address";
+    /** Extra understood by the upstream Leaf-lsgtky build; the 1812z fork reconnects always. */
+    private static final String OPPO_RECONNECT_EXTRA = "allow_rfcomm_reconnect";
+    private static final String OPPO_PODS_PACKAGE = "moe.chenxy.oppopods";
+    /** How long a forwarded OppoPods state counts as proof that the module controls a headset. */
+    private static final long OPPO_STATE_FRESH_MS = 120_000L;
+    private static final long OPPO_RESCAN_INTERVAL_MS = 1_500L;
+    private static final long OPPO_PROBE_INTERVAL_MS = 1_500L;
+    private static final int OPPO_REPORT_LIMIT = 4;
 
     private static volatile AncController instance;
 
@@ -75,14 +88,20 @@ final class AncController {
     private final Handler mainHandler;
     private final Handler worker;
     private final CopyOnWriteArrayList<ButtonBinding> bindings = new CopyOnWriteArrayList<>();
+    /**
+     * ANC state the OppoPods module reported, keyed by the address it belongs to (empty key
+     * for a report without address), oldest entry first. Worker thread only.
+     */
+    private final LinkedHashMap<String, OppoReport> oppoReports = new LinkedHashMap<>();
     private volatile IBinder service;
     private volatile BluetoothDevice activeDevice;
     private volatile int currentMode = MODE_OFF;
     private volatile boolean binding;
     private volatile DeviceKind activeDeviceKind = DeviceKind.NATIVE;
     private volatile String activeHuaweiRoute;
-    private volatile int oppoMode = -1;
-    private volatile String oppoAddress;
+    private volatile long oppoRescanAt;
+    private volatile long oppoProbeAt;
+    private volatile boolean oppoPodsVersionLogged;
 
     static AncController get(Context context) {
         AncController local = instance;
@@ -145,10 +164,12 @@ final class AncController {
         }
         String address = intent.getStringExtra(OppoPodsBridge.EXTRA_ADDRESS);
         worker.post(() -> {
-            oppoMode = mode;
-            oppoAddress = address;
+            noteOppoReport(address, mode);
             BluetoothDevice device = activeDevice;
             if (device == null) {
+                // The state may arrive before the headset is classified (or after a
+                // SystemUI restart), so re-run the device scan instead of dropping it.
+                requestOppoRescan();
                 return;
             }
             String activeAddress = safeAddress(device);
@@ -163,20 +184,70 @@ final class AncController {
         });
     }
 
-    /** Applies the most recent state reported by the OppoPods module, if it matches. */
+    /**
+     * Remembers an OppoPods state report so the headset can be recognised by the address the
+     * module reported, no matter how the headset is named. Entries older than
+     * {@link #OPPO_STATE_FRESH_MS} are dropped, which keeps a removed or disabled module from
+     * holding the row open forever.
+     */
+    private void noteOppoReport(String address, int mode) {
+        long now = SystemClock.elapsedRealtime();
+        String key = oppoReportKey(address);
+        // Re-insert so the most recently reporting headset is the last entry and therefore
+        // the last one the size limit below trims.
+        oppoReports.remove(key);
+        oppoReports.put(key, new OppoReport(mode, now));
+        Iterator<Map.Entry<String, OppoReport>> entries = oppoReports.entrySet().iterator();
+        while (entries.hasNext()) {
+            if (!entries.next().getValue().isFresh(now)) {
+                entries.remove();
+            }
+        }
+        while (oppoReports.size() > OPPO_REPORT_LIMIT) {
+            Iterator<Map.Entry<String, OppoReport>> oldest = oppoReports.entrySet().iterator();
+            oldest.next();
+            oldest.remove();
+        }
+    }
+
+    /**
+     * Whether the installed OppoPods build claims this headset. The address reported by the
+     * module decides; only a report without any address falls back to the OPPO device name,
+     * because such a report cannot be attributed in any other way.
+     */
+    private boolean isOppoPodsControlled(BluetoothDevice device) {
+        long now = SystemClock.elapsedRealtime();
+        String address = safeAddress(device);
+        if (address != null && !address.isBlank()) {
+            OppoReport report = oppoReports.get(oppoReportKey(address));
+            if (report != null && report.isFresh(now)) {
+                return true;
+            }
+        }
+        OppoReport unaddressed = oppoReports.get("");
+        return unaddressed != null && unaddressed.isFresh(now) && isOppoDevice(device);
+    }
+
+    private static String oppoReportKey(String address) {
+        return address == null || address.isBlank() ? "" : address.toUpperCase(Locale.ROOT);
+    }
+
+    /** Applies the most recent state reported for this headset, if the module reported one. */
     private void applyCachedOppoState(BluetoothDevice device) {
-        int mode = oppoMode;
-        if (mode < MODE_OFF) {
+        long now = SystemClock.elapsedRealtime();
+        String address = safeAddress(device);
+        OppoReport report = address == null || address.isBlank()
+                ? null
+                : oppoReports.get(oppoReportKey(address));
+        if (report == null) {
+            report = oppoReports.get("");
+        }
+        if (report == null || !report.isFresh(now)) {
             return;
         }
-        String address = oppoAddress;
-        String activeAddress = safeAddress(device);
-        if (address != null && !address.isBlank() && activeAddress != null
-                && !address.equalsIgnoreCase(activeAddress)) {
-            return;
-        }
-        currentMode = mode;
-        Log.i(TAG, "restored OppoPods state mode=" + mode + " device=" + safeName(device));
+        currentMode = report.mode;
+        Log.i(TAG, "restored OppoPods state mode=" + report.mode
+                + " device=" + safeName(device));
     }
 
     void attach(VolumeButtonInjector.NativeButton button) {
@@ -222,7 +293,11 @@ final class AncController {
                     + " current=" + mode + " target=" + target);
             if (changeMode(binder, device, target)) {
                 publish(device, target);
-                ModeIslandNotifier.show(context, target, safeDeviceName(device));
+                if (HyperVolumeAncSettings.islandNotification()) {
+                    ModeIslandNotifier.show(context, target, safeDeviceName(device));
+                } else {
+                    Log.i(TAG, "mode island skipped: notification option disabled");
+                }
                 worker.postDelayed(refreshTask, 900);
             } else {
                 showToast("切换失败，请查看 LSPosed 日志");
@@ -405,7 +480,11 @@ final class AncController {
             String support = reply.readString();
             Log.i(TAG, "checkSupport device=" + safeName(device) + " result=" + support);
             if (support == null || support.isBlank()) {
+                if (isOppoPodsControlled(device)) {
+                    return acceptOppoDevice(device);
+                }
                 if (!supportsAirPodsNoiseControl(device)) {
+                    waitForOppoReport(device);
                     return false;
                 }
                 activeDeviceKind = DeviceKind.APPLE;
@@ -415,6 +494,10 @@ final class AncController {
                 return true;
             }
             if (!supportDeclaresNoiseControl(support)) {
+                if (isOppoPodsControlled(device)) {
+                    return acceptOppoDevice(device);
+                }
+                waitForOppoReport(device);
                 Log.i(TAG, "device does not declare ANC support=" + safeName(device));
                 return false;
             }
@@ -586,12 +669,76 @@ final class AncController {
     }
 
     /**
-     * OPPO headsets are only controllable while the OppoPods module fakes MIUI headset
-     * support, which is what the ANC capability bit in the support string confirms.
+     * OPPO headsets are driven by whichever OppoPods build is installed; the upstream
+     * Leaf-lsgtky project and the 1812z fork share the package name and the
+     * {@code chen.action.oppopods.*} broadcast interface.
      */
     private boolean isOppoDevice(BluetoothDevice device) {
         String normalized = normalizedDeviceName(device);
         return normalized != null && normalized.contains("oppo");
+    }
+
+    /**
+     * Handles OPPO headsets when the MIUI support string stays empty.
+     *
+     * <p>The upstream Leaf-lsgtky build does not fake {@code checkSupport}, so the usual ANC
+     * bit test never passes for OPPO headsets there and this method takes over: the headset is
+     * accepted as soon as the module reports ANC state for it. The 1812z fork does fake the
+     * support string, but also answers these reports, so both builds share one code path.
+     *
+     * <p>The headset name is not the gate: it can be renamed, and the module reports state
+     * keyed by address. Waiting instead of guessing means a headset the module does not
+     * control stays without a row, even when it is called "OPPO something".
+     */
+    private boolean acceptOppoDevice(BluetoothDevice device) {
+        activeDeviceKind = DeviceKind.OPPO;
+        activeHuaweiRoute = null;
+        applyCachedOppoState(device);
+        Log.i(TAG, "classified ANC device=" + safeName(device)
+                + " kind=OPPO route=null source=oppopods-report");
+        return true;
+    }
+
+    /**
+     * Asks the module for a status report when a headset declares no ANC capability of its
+     * own. The answer arrives as a broadcast and re-runs the scan, which then accepts the
+     * headset above; anything else leaves the row hidden.
+     */
+    private void waitForOppoReport(BluetoothDevice device) {
+        requestOppoStatus();
+        logOppoPodsModule();
+        Log.i(TAG, "no OppoPods report for " + safeName(device) + " yet, ANC row stays hidden");
+    }
+
+    /**
+     * Re-runs the headset scan after an OppoPods state arrived too early to be matched.
+     * Throttled so a module that keeps reporting state without a usable device cannot
+     * turn the scan into a loop.
+     */
+    private void requestOppoRescan() {
+        long now = SystemClock.elapsedRealtime();
+        if (now - oppoRescanAt < OPPO_RESCAN_INTERVAL_MS) {
+            return;
+        }
+        oppoRescanAt = now;
+        refresh();
+    }
+
+    /** Best-effort log of which OppoPods build is installed; both share the package name. */
+    private void logOppoPodsModule() {
+        if (oppoPodsVersionLogged) {
+            return;
+        }
+        oppoPodsVersionLogged = true;
+        try {
+            PackageInfo info = context.getPackageManager()
+                    .getPackageInfo(OPPO_PODS_PACKAGE, 0);
+            Log.i(TAG, "OppoPods module installed version=" + info.versionName
+                    + " code=" + info.versionCode);
+        } catch (Throwable error) {
+            Log.i(TAG, "OppoPods module not visible to this process (" + error.getClass()
+                    .getSimpleName() + ")");
+        }
     }
 
     private boolean supportDeclaresNoiseControl(String support) {
@@ -707,6 +854,8 @@ final class AncController {
 
     /**
      * OPPO headsets are driven through the OppoPods module running in the Bluetooth process.
+     * Both forks listen for this action and expect the same {@code status} extra, which is
+     * also why no fork-specific code is needed for the switch itself.
      */
     private boolean changeOppoMode(BluetoothDevice device, int mode) {
         int status = modeToOppoStatus(mode);
@@ -726,17 +875,29 @@ final class AncController {
     }
 
     private void requestOppoStatus() {
+        long now = SystemClock.elapsedRealtime();
+        if (now - oppoProbeAt < OPPO_PROBE_INTERVAL_MS) {
+            return;
+        }
+        oppoProbeAt = now;
         try {
             context.sendBroadcast(new Intent(OPPO_REFRESH_ACTION)
                     .setPackage(BLUETOOTH_PROCESS_PACKAGE)
-                    .addFlags(Intent.FLAG_RECEIVER_FOREGROUND));
+                    .addFlags(Intent.FLAG_RECEIVER_FOREGROUND)
+                    // The 1812z fork always reconnects here; the upstream Leaf-lsgtky build
+                    // only does when asked, and without it a dropped link answers nothing.
+                    .putExtra(OPPO_RECONNECT_EXTRA, true));
             Log.i(TAG, "requested OppoPods status refresh");
         } catch (Throwable error) {
             Log.w(TAG, "failed to request OppoPods status", error);
         }
     }
 
-    /** OPPO status codes: 1=off, 2=noise cancelling, 3=transparency, 4..8=adaptive/smart levels. */
+    /**
+     * OPPO status codes: 1=off, 2=noise cancelling, 3=transparency, 4=adaptive and 5..8 for
+     * the smart/light/medium/deep cancellation levels only the 1812z fork reports. The volume
+     * panel has no separate entry for those, so they all render as noise cancelling.
+     */
     static int oppoStatusToMode(int status) {
         return switch (status) {
             case 1 -> MODE_OFF;
@@ -959,6 +1120,21 @@ final class AncController {
 
         ButtonBinding(VolumeButtonInjector.NativeButton button) {
             this.button = new WeakReference<>(button);
+        }
+    }
+
+    /** One ANC state the OppoPods module published, together with when it arrived. */
+    private static final class OppoReport {
+        final int mode;
+        final long reportedAt;
+
+        OppoReport(int mode, long reportedAt) {
+            this.mode = mode;
+            this.reportedAt = reportedAt;
+        }
+
+        boolean isFresh(long now) {
+            return now - reportedAt <= OPPO_STATE_FRESH_MS;
         }
     }
 
