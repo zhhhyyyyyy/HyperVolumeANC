@@ -4,17 +4,22 @@
 
 # HyperVolumeANC
 
-### 给澎湃 OS 4 的音量面板加一个更顺手的降噪按钮
+**给澎湃 OS 4 的音量面板加一个更顺手的降噪按钮**
 
-简体中文
+[![Platform](https://img.shields.io/badge/Platform-Android%2017-green?style=flat-square&logo=android)](https://android.com)
+[![Framework](https://img.shields.io/badge/Framework-LSPosed-blueviolet?style=flat-square)](https://github.com/LSPosed/LSPosed)
+[![ROM](https://img.shields.io/badge/ROM-澎湃OS%204%20Beta-orange?style=flat-square)](https://hyperos.mi.com)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue?style=flat-square)](LICENSE)
+
+**简体中文** | **[English](README_EN.md)**
 
 </div>
 
 ## 当前支持的版本
 
-Android 15-16 的小米澎湃 OS 4，模块基于 libxposed API 102（LSPosed）。
+Android 17 的小米澎湃 OS 4 Beta，模块基于 libxposed API 102（LSPosed）。
 
-目前只在开发者自用的小米澎湃 OS 4 设备上做过完整测试，其它机型与地区版本可能存在差异，欢迎反馈。
+目前仅在开发者的小米 17 Pro Max 与红米 K90 Pro Max（小米澎湃 OS 4）上做过完整测试，其它机型与国外地区版本可能存在差异，欢迎反馈。
 
 ## 使用前说明
 
