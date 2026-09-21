@@ -106,10 +106,7 @@
     <string name="about_developer_tip_body">这个模块最初只是想增加一种更符合直觉且更便捷的降噪切换按钮。使用中遇到问题欢迎到群里反馈，也欢迎去 GitHub 提 Issue；如果你觉得好用，帮忙点个 Star 就足够了。</string>
     <string name="about_replay_oobe">重新查看引导</string>
     <string name="about_replay_oobe_summary">首次启动的四步引导可以再看一遍</string>
-    <string name="about_project_link">本项目链接</string>
-    <string name="about_project_placeholder">尚未发布，敬请期待</string>
     <string name="about_star">给项目点个 Star</string>
-    <string name="about_star_summary">觉得好用的话，去 GitHub 点个 Star 支持一下</string>
     <string name="about_telegram">Telegram 群组</string>
     <string name="about_telegram_summary">HyperVolumeANC · 点击加入</string>
     <string name="about_framework">模块框架</string>

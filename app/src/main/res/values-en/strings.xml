@@ -105,10 +105,7 @@
     <string name="about_developer_tip_body">This module started with a simple idea: a more intuitive and quicker way to switch noise cancelling. If you run into problems, feel free to ask in the group or open an issue on GitHub. If it works well for you, a star is more than enough.</string>
     <string name="about_replay_oobe">Show the guide again</string>
     <string name="about_replay_oobe_summary">Replay the four step first-run guide</string>
-    <string name="about_project_link">Project link</string>
-    <string name="about_project_placeholder">Not published yet</string>
     <string name="about_star">Star the project</string>
-    <string name="about_star_summary">If it works well for you, a star on GitHub helps a lot</string>
     <string name="about_telegram">Telegram group</string>
     <string name="about_telegram_summary">HyperVolumeANC · tap to join</string>
     <string name="about_framework">Module framework</string>

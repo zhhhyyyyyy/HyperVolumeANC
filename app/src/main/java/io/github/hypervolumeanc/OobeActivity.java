@@ -155,12 +155,22 @@ public final class OobeActivity extends Activity {
     }
 
     private View heroIcon(int drawableRes, int sizeDp) {
+        return heroIcon(drawableRes, sizeDp, false);
+    }
+
+    /**
+     * @param fill 头像这类照片铺满整块底板，应用图标则留出内边距。
+     */
+    private View heroIcon(int drawableRes, int sizeDp, boolean fill) {
         ImageView icon = new ImageView(this);
         icon.setImageResource(drawableRes);
         icon.setBackground(getDrawable(R.drawable.bg_app_icon_plate));
         icon.setClipToOutline(true);
         icon.setElevation(Ui.dp(this, 6));
-        icon.setPadding(Ui.dp(this, 10), Ui.dp(this, 10), Ui.dp(this, 10), Ui.dp(this, 10));
+        icon.setScaleType(fill ? ImageView.ScaleType.CENTER_CROP : ImageView.ScaleType.FIT_CENTER);
+        if (!fill) {
+            icon.setPadding(Ui.dp(this, 10), Ui.dp(this, 10), Ui.dp(this, 10), Ui.dp(this, 10));
+        }
         LinearLayout.LayoutParams params =
                 new LinearLayout.LayoutParams(Ui.dp(this, sizeDp), Ui.dp(this, sizeDp));
         icon.setLayoutParams(params);
@@ -212,7 +222,7 @@ public final class OobeActivity extends Activity {
 
     private View buildDeveloperStep() {
         LinearLayout page = (LinearLayout) page();
-        page.addView(heroIcon(R.drawable.developer_avatar, 112));
+        page.addView(heroIcon(R.drawable.developer_avatar, 112, true));
         addTitle(page, getString(R.string.oobe_developer_name),
                 getString(R.string.about_developer_label));
 

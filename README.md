@@ -16,6 +16,10 @@
 
 </div>
 
+## 支持这个项目
+
+HyperVolumeANC 是用业余时间维护的免费模块。如果它让你的音量条顺手了一点，欢迎到 [GitHub 仓库](https://github.com/zhhhyyyyyy/HyperVolumeANC) 点一个 ⭐ Star —— 这是对作者最直接的鼓励；遇到问题也欢迎到 [Issues](https://github.com/zhhhyyyyyy/HyperVolumeANC/issues) 或 [Telegram 群组](https://t.me/+yCcx0sOHbMQyNTI1) 反馈。
+
 ## 当前支持的版本
 
 Android 17 的小米澎湃 OS 4 Beta，模块基于 libxposed API 102（LSPosed）。
@@ -103,11 +107,6 @@ app/src/main/java/io/github/hypervolumeanc/
 模块侧不自行实现耳机协议：小米与 AirPods 走系统接口，Sony、Huawei、OPPO 分别走对应模块公开的广播接口。
 
 根目录的 `update.json` 是应用内更新检查读取的更新源，发布新版本时把 `VersionCode`、`VersionName`、`ReleaseNoteURL`、`APKURL` 与 `APKSize` 一起改掉即可。
-
-## 支持这个项目
-
-HyperVolumeANC 是用业余时间维护的免费模块。如果它让你的音量条顺手了一点，欢迎到 [GitHub 仓库](https://github.com/zhhhyyyyyy/HyperVolumeANC) 点一个 ⭐ Star —— 这是对作者最直接的鼓励；遇到问题也欢迎到 [Issues](https://github.com/zhhhyyyyyy/HyperVolumeANC/issues) 或 [Telegram 群组](https://t.me/+yCcx0sOHbMQyNTI1) 反馈。
-
 ## 交流 & 反馈
 
 - Telegram 群组：[HyperVolumeANC](https://t.me/+yCcx0sOHbMQyNTI1)

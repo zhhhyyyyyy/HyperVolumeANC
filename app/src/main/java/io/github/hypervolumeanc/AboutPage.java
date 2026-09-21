@@ -129,8 +129,6 @@ final class AboutPage {
         LinearLayout links = Ui.card(activity);
         links.addView(starRow(activity));
         Ui.addDivider(links);
-        links.addView(projectRow(activity));
-        Ui.addDivider(links);
         links.addView(linkRow(activity, R.drawable.ic_brand_telegram,
                 activity.getString(R.string.about_telegram),
                 activity.getString(R.string.about_telegram_summary), TELEGRAM_URL));
@@ -225,26 +223,19 @@ final class AboutPage {
         return row;
     }
 
-    /** Star 请求行：直接打开 GitHub 仓库首页。 */
+    /** Star 请求，同时也是本项目链接：标题写请求，副标题展示地址。 */
     private static View starRow(Activity activity) {
+        String url = projectUrl(activity);
         View row = Ui.linkRow(activity, R.drawable.ic_star,
                 activity.getString(R.string.about_star),
-                activity.getString(R.string.about_star_summary), Ui.chevron(activity), true);
-        row.setOnClickListener(view -> Ui.openUrl(activity, REPO_URL));
+                url, Ui.chevron(activity), true);
+        row.setOnClickListener(view -> Ui.openUrl(activity, url));
         return row;
     }
 
-    private static View projectRow(Activity activity) {
+    private static String projectUrl(Activity activity) {
         String url = activity.getString(R.string.project_url).trim();
-        boolean available = !url.isEmpty();
-        View row = Ui.linkRow(activity, R.drawable.ic_brand_github,
-                activity.getString(R.string.about_project_link),
-                available ? url : activity.getString(R.string.about_project_placeholder),
-                available ? Ui.chevron(activity) : null, available);
-        if (available) {
-            row.setOnClickListener(view -> Ui.openUrl(activity, url));
-        }
-        return row;
+        return url.isEmpty() ? REPO_URL : url;
     }
 
     private static View linkRow(Activity activity, int iconRes, String title,

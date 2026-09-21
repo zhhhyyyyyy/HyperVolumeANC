@@ -16,6 +16,10 @@
 
 </div>
 
+## Support the project
+
+HyperVolumeANC is a free module maintained in spare time. If it makes your volume panel a little handier, a ⭐ star on the [GitHub repository](https://github.com/zhhhyyyyyy/HyperVolumeANC) is the most direct way to say thanks; bug reports are welcome in [Issues](https://github.com/zhhhyyyyyy/HyperVolumeANC/issues) or the [Telegram group](https://t.me/+yCcx0sOHbMQyNTI1).
+
 ## Supported versions
 
 Android 17 with Xiaomi HyperOS 4 Beta, using libxposed API 102 (LSPosed).
@@ -101,10 +105,6 @@ app/src/main/java/io/github/hypervolumeanc/
 ```
 
 The `update.json` in the repository root is the feed used by the in-app update check — bump `VersionCode`, `VersionName`, `ReleaseNoteURL`, `APKURL` and `APKSize` together when publishing a new version.
-
-## Support the project
-
-HyperVolumeANC is a free module maintained in spare time. If it makes your volume panel a little handier, a ⭐ star on the [GitHub repository](https://github.com/zhhhyyyyyy/HyperVolumeANC) is the most direct way to say thanks; bug reports are welcome in [Issues](https://github.com/zhhhyyyyyy/HyperVolumeANC/issues) or the [Telegram group](https://t.me/+yCcx0sOHbMQyNTI1).
 
 ## Community
 
