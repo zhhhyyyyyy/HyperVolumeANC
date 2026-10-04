@@ -28,7 +28,7 @@ The module has only been tested on the developer's Xiaomi 17 Pro Max and Redmi K
 
 ## Download
 
-- Grab the latest APK from [Releases](https://github.com/zhhhyyyyyy/HyperVolumeANC/releases/latest), then enable the module in LSPosed and check both scopes below
+- Grab the latest APK from [Releases](https://github.com/zhhhyyyyyy/HyperVolumeANC/releases/latest), then enable the module in LSPosed and check the three scopes below
 - “Settings → Update module” reads [update.json](https://raw.githubusercontent.com/zhhhyyyyyy/HyperVolumeANC/main/update.json) from the repository and can jump straight to the download when a new version is out
 
 ## Before you start
@@ -37,8 +37,18 @@ Enable HyperVolumeANC in [LSPosed](https://github.com/LSPosed/LSPosed) with both
 
 - **System UI** (`com.android.systemui`) — draws the ANC row in the volume panel
 - **Bluetooth extension** (`com.xiaomi.bluetooth`) — relays headset state and broadcasts
+- **Sound effects** (`com.miui.misound`) — provides the panel behind the per-app volume entry above the volume bar; you can skip it if you only use the noise control button
 
-Restart the scopes afterwards (requires root). The app's “Settings → Module status” shows whether both scopes are connected.
+Restart the scopes afterwards (requires root). The app's “Settings → Module status” shows whether the three scopes are connected.
+
+### Do not enable another module with the same feature
+
+The per-app volume entry shares its spot and the same volume controls with these modules — keep only one of them:
+
+- **AppVolumeBarHook** — injects its own per-app volume entry into the volume panel. This module steps aside when it detects that entry (no duplicate button), but running both implementations is still not recommended.
+- **Soundman** (`hk.uwu.soundman`) — also provides per-app / independent volume control. Running both may show two entries or two panels fighting each other.
+
+If you only need the noise control button, just turn off **Per-app volume entry** on the Home tab.
 
 The module only uses the built-in headset service and the public broadcast interfaces of the supported companion modules. It does not implement any headset protocol itself.
 
@@ -49,13 +59,15 @@ Headsets that only toggle noise cancelling without transparency (for example HUA
 ## Features
 
 - **Volume panel button** — a third instance button next to silent and DND for switching headset noise control
+- **Per-app volume entry** — while an app is playing audio, an entry appears above the volume bar and opens a panel where every app can be adjusted on its own. The panel slides in from the right, its card and slider proportions follow the native style, and it no longer blurs or dims the whole screen. In landscape it also stops the panel buttons from being pushed off the screen.
+- **Native floating ball** — MiSound's own floating ball is hidden (the entry moved above the volume bar); the instance is kept around for the click fallback.
 - **Three states** — noise cancelling, transparency and off, with a choice between a two state (NC ⇄ transparency) and a three state (NC → transparency → off) cycle
 - **Matching icons** — ring for noise cancelling, dots for transparency, adaptive glyph for off, using the same palette as the rest of the volume panel
 - **Disconnect** — expanding the headset menu in the volume panel lets you disconnect the connected headset
 - **Focus notification** — switching to noise cancelling or transparency shows a status bar strong toast with the matching icon; switching off stays silent. Can be turned off in Settings
 - **Hide launcher icon** — removes the icon from the launcher; the app stays reachable through the module settings entry of your module manager
-- **Module status check** — the settings page probes both scopes and reports live whether the module is loaded
-- **Restart scopes** — restart both scoped processes from the top right corner, no phone reboot needed
+- **Module status check** — the settings page probes the three scopes and reports live whether the module is loaded
+- **Restart scopes** — restart the three scoped processes from the top right corner, no phone reboot needed
 - **Appearance** — language (system / 简体中文 / English), theme (light / dark / system) and bottom bar style (HyperOS bar / floating bar / liquid glass bar)
 - **Update check** — check for new versions from the settings page and jump straight to the download when one is available
 
