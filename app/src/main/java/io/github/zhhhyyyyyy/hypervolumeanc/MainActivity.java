@@ -59,6 +59,7 @@ public final class MainActivity extends ComponentActivity {
     private Switch cycleSwitch;
     private Switch islandSwitch;
     private Switch hideIconSwitch;
+    private Switch appVolumeSwitch;
     private TextView cycleSummary;
     private TextView statusSummary;
     private TextView statusHint;
@@ -100,7 +101,7 @@ public final class MainActivity extends ComponentActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent != null && HookStatus.ACTION_PONG.equals(intent.getAction())) {
-                HookStatus.acceptAnswer(intent);
+                HookStatus.acceptAnswer(MainActivity.this, intent);
             }
             refreshStatusCard();
         }
@@ -119,6 +120,7 @@ public final class MainActivity extends ComponentActivity {
         SCOPES.clear();
         SCOPES.put(HookStatus.SYSTEM_UI, getString(R.string.settings_scope_systemui));
         SCOPES.put(HookStatus.BLUETOOTH_EXTENSION, getString(R.string.settings_scope_bluetooth));
+        SCOPES.put(HookStatus.MISOUND, getString(R.string.settings_scope_misound));
         setContentView(buildContentView());
         selectTab(TAB_HOME);
     }
@@ -409,8 +411,10 @@ public final class MainActivity extends ComponentActivity {
         labels.addView(statusSummary, summaryParams);
         row.addView(labels, new LinearLayout.LayoutParams(0,
                 ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f));
+        row.setOnClickListener(view -> DiagnosticsActivity.start(this));
         card.addView(row);
         statusHint = Ui.hint(this, getString(R.string.settings_status_hint));
+        card.addView(Ui.hint(this, getString(R.string.settings_status_open)));
         card.addView(statusHint);
         return card;
     }
@@ -485,6 +489,19 @@ public final class MainActivity extends ComponentActivity {
         });
         card.addView(Ui.row(this, getString(R.string.home_module_enable_title),
                 getString(R.string.home_module_enable_summary), moduleSwitch, false));
+        Ui.addDivider(card);
+
+        appVolumeSwitch = new Switch(this);
+        appVolumeSwitch.setOnCheckedChangeListener((button, checked) -> {
+            if (binding) {
+                return;
+            }
+            Settings.setAppVolumeEntry(this, checked);
+            refreshState();
+        });
+        card.addView(Ui.row(this, getString(R.string.home_app_volume_title),
+                getString(R.string.home_app_volume_summary), appVolumeSwitch, false));
+        card.addView(Ui.hint(this, getString(R.string.home_app_volume_hint)));
         Ui.addDivider(card);
 
         cycleSwitch = new Switch(this);
@@ -567,6 +584,7 @@ public final class MainActivity extends ComponentActivity {
         cycleSwitch.setChecked(includeOff);
         islandSwitch.setChecked(Settings.islandNotification(this));
         hideIconSwitch.setChecked(Settings.launcherIconHidden(this));
+        appVolumeSwitch.setChecked(Settings.appVolumeEntry(this));
         binding = false;
 
         cycleSummary.setText(enabled
@@ -613,7 +631,8 @@ public final class MainActivity extends ComponentActivity {
         Ui.tintStatusDot(statusDot, connected);
         statusHint.setText(getString(R.string.settings_status_detail,
                 HookStatus.describe(this, HookStatus.SYSTEM_UI),
-                HookStatus.describe(this, HookStatus.BLUETOOTH_EXTENSION)));
+                HookStatus.describe(this, HookStatus.BLUETOOTH_EXTENSION),
+                HookStatus.describe(this, HookStatus.MISOUND)));
     }
 
     private void probeStatus() {

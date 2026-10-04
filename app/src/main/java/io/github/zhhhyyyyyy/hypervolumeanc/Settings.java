@@ -15,6 +15,7 @@ final class Settings {
     static final String KEY_MODULE_ENABLED = "module_enabled";
     static final String KEY_CYCLE_INCLUDE_OFF = "cycle_include_off";
     static final String KEY_ISLAND_NOTIFICATION = "island_notification";
+    static final String KEY_APP_VOLUME_ENTRY = "app_volume_entry";
     static final String KEY_OOBE_DONE = "oobe_done";
     static final String KEY_LANGUAGE = "app_language";
     static final String KEY_THEME_MODE = "theme_mode";
@@ -39,6 +40,7 @@ final class Settings {
     private static final String[] TARGETS = {
             "com.android.systemui",
             "com.xiaomi.bluetooth",
+            "com.miui.misound",
     };
 
     private Settings() {
@@ -57,6 +59,11 @@ final class Settings {
         return preferences(context).getBoolean(KEY_ISLAND_NOTIFICATION, true);
     }
 
+    /** 音量条上方的分应用音量入口（小米声音提供面板）是否启用，默认开启。 */
+    static boolean appVolumeEntry(Context context) {
+        return preferences(context).getBoolean(KEY_APP_VOLUME_ENTRY, true);
+    }
+
     static void setModuleEnabled(Context context, boolean value) {
         write(context, KEY_MODULE_ENABLED, value);
     }
@@ -67,6 +74,10 @@ final class Settings {
 
     static void setIslandNotification(Context context, boolean value) {
         write(context, KEY_ISLAND_NOTIFICATION, value);
+    }
+
+    static void setAppVolumeEntry(Context context, boolean value) {
+        write(context, KEY_APP_VOLUME_ENTRY, value);
     }
 
     /**
@@ -163,7 +174,9 @@ final class Settings {
                         .putExtra(ModuleConfigProvider.EXTRA_CYCLE_INCLUDE_OFF,
                                 cycleIncludesOff(appContext))
                         .putExtra(ModuleConfigProvider.EXTRA_ISLAND_NOTIFICATION,
-                                islandNotification(appContext)));
+                                islandNotification(appContext))
+                        .putExtra(ModuleConfigProvider.EXTRA_APP_VOLUME_ENTRY,
+                                appVolumeEntry(appContext)));
             } catch (Throwable ignored) {
                 // The target may not be running; it reads the provider on start instead.
             }

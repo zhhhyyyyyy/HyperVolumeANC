@@ -206,6 +206,8 @@ public final class OobeActivity extends Activity {
         addPoint(card, getString(R.string.oobe_welcome_point_2));
         Ui.addDivider(card);
         addPoint(card, getString(R.string.oobe_welcome_point_3));
+        Ui.addDivider(card);
+        addPoint(card, getString(R.string.oobe_welcome_point_4));
         LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         cardParams.topMargin = Ui.dp(this, 26);

@@ -58,6 +58,10 @@
             android:name=".InfoActivity"
             android:exported="false"
             android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".DiagnosticsActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
         <provider
             android:name=".ModuleConfigProvider"
             android:authorities="io.github.zhhhyyyyyy.hypervolumeanc.config"

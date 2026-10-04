@@ -19,19 +19,23 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.lang.ref.WeakReference;
 
 final class VolumeButtonInjector {
     private static final String TAG = "HyperVolumeANC";
     private static final String PLUGIN_PACKAGE = "miui.systemui.plugin";
     private static volatile boolean nativeRowAvailable;
     private static volatile int nativeExpandedExtraHeight;
+    /** 最近一次注入的降噪行，供触底 / 拖拽拉伸的等差位移补偿使用。 */
+    private static final WeakReference<View> NO_ROW = new WeakReference<>(null);
+    private static volatile WeakReference<View> injectedRow = NO_ROW;
 
     private VolumeButtonInjector() {
     }
 
     static void inject(Object target) {
         if (!(target instanceof ViewGroup host)) {
-            Log.w(TAG, "ringer layout has unexpected type: " + target);
+            HookLog.w("ringer layout has unexpected type: " + target);
             return;
         }
 
@@ -41,7 +45,7 @@ final class VolumeButtonInjector {
         View nativeDivider = find(host, "miui_volume_ringer_divider");
         if (buttonLayout == null || stateLayout == null || dndRow == null
                 || nativeDivider == null) {
-            Log.e(TAG, "native ringer hierarchy is incomplete");
+            HookLog.e("native ringer hierarchy is incomplete");
             return;
         }
         if (findNativeButton(buttonLayout) != null) {
@@ -72,6 +76,7 @@ final class VolumeButtonInjector {
                     host, stateLayout, buttonLayout, dndRow, nativeDivider,
                     divider, ancRow, rowLayoutId);
             ancRow.setTag(button);
+            injectedRow = new WeakReference<>(ancRow);
 
             AncController controller = AncController.get(context);
             button.bind(controller);
@@ -87,7 +92,7 @@ final class VolumeButtonInjector {
                     // SystemUI reuses the same panel instance after detaching it.
                 }
             });
-            Log.i(TAG, "native ANC ringer row injected");
+            HookLog.i("native ANC ringer row injected");
         } catch (Throwable error) {
             if (ancRow != null && ancRow.getParent() == buttonLayout) {
                 buttonLayout.removeView(ancRow);
@@ -95,7 +100,7 @@ final class VolumeButtonInjector {
             if (divider != null && divider.getParent() == buttonLayout) {
                 buttonLayout.removeView(divider);
             }
-            Log.e(TAG, "failed to inject native ANC ringer row", error);
+            HookLog.e("failed to inject native ANC ringer row", error);
         }
     }
 
@@ -117,6 +122,17 @@ final class VolumeButtonInjector {
         return nativeRowAvailable ? nativeExpandedExtraHeight : 0;
     }
 
+    /**
+     * 音量条触底 / 拖拽拉伸时，原生按键位等差序列驱动静音与勿扰按钮的位移，
+     * 新增的降噪行位于勿扰下方一行，因此位移是勿扰位移再外推一步。
+     */
+    static void setExtraRowTranslationY(float translationY) {
+        View row = injectedRow.get();
+        if (row != null && row.getVisibility() == View.VISIBLE) {
+            row.setTranslationY(translationY);
+        }
+    }
+
     static void attachToShowHideAnimator(Object animator, View volumeView) {
         attachToShowHideAnimator(animator, volumeView, true);
     }
@@ -128,7 +144,7 @@ final class VolumeButtonInjector {
             if (allowRetry) {
                 volumeView.post(() -> attachToShowHideAnimator(animator, volumeView, false));
             } else {
-                Log.w(TAG, "ANC row unavailable when show/hide animator initialized");
+                HookLog.w("ANC row unavailable when show/hide animator initialized");
             }
             return;
         }
@@ -163,9 +179,9 @@ final class VolumeButtonInjector {
             extendedPositions[extendedPositions.length - 1] =
                     button.ancRow.getX() + volumeView.getX();
             positionsField.set(animator, extendedPositions);
-            Log.i(TAG, "ANC row joined native show/hide animation sequence");
+            HookLog.i("ANC row joined native show/hide animation sequence");
         } catch (Throwable error) {
-            Log.e(TAG, "failed to join native show/hide animation", error);
+            HookLog.e("failed to join native show/hide animation", error);
         }
     }
 
@@ -178,7 +194,7 @@ final class VolumeButtonInjector {
                 button.syncExpandCollapsedFrame();
             }
         } catch (Throwable error) {
-            Log.e(TAG, "failed to synchronize ANC expansion frame", error);
+            HookLog.e("failed to synchronize ANC expansion frame", error);
         }
     }
 
@@ -343,11 +359,11 @@ final class VolumeButtonInjector {
 
         void bind(AncController controller) {
             ancBlur.setOnClickListener(view -> {
-                Log.i(TAG, "ANC button click received");
+                HookLog.i("ANC button click received");
                 controller.toggle();
             });
             actionBlur.setOnClickListener(view -> {
-                Log.i(TAG, "disconnect button click received");
+                HookLog.i("disconnect button click received");
                 controller.disconnect();
             });
         }
@@ -373,7 +389,7 @@ final class VolumeButtonInjector {
 
         void updateExpanded(boolean expanded, boolean force) {
             this.expanded = expanded;
-            Log.d(TAG, "expand=" + expanded + " dialog=" + needShowDialog()
+            HookLog.d("expand=" + expanded + " dialog=" + needShowDialog()
                     + " available=" + available
                     + " row=" + ancRow.getWidth() + "x" + ancRow.getHeight());
             invoke(ancHelper, "onExpanded", new Class<?>[]{boolean.class, boolean.class},
@@ -495,9 +511,9 @@ final class VolumeButtonInjector {
                     method.setAccessible(true);
                     method.invoke(parent);
                 } catch (NoSuchMethodException ignored) {
-                    Log.w(TAG, "MiuiVolumeDialogView.updateVolumePanelSize unavailable");
+                    HookLog.w("MiuiVolumeDialogView.updateVolumePanelSize unavailable");
                 } catch (Throwable error) {
-                    Log.e(TAG, "failed to refresh native volume panel geometry", error);
+                    HookLog.e("failed to refresh native volume panel geometry", error);
                 }
             }
             applyNativeLayout();
@@ -524,7 +540,7 @@ final class VolumeButtonInjector {
             View shadow = find(panel, "shadow");
             int extra = available ? extraHeight() : 0;
             int backgroundHeight = panelBaseHeight() + extra;
-            Log.d(TAG, "panel height dialog=" + needShowDialog() + " base=" + panelBaseHeight()
+            HookLog.d("panel height dialog=" + needShowDialog() + " base=" + panelBaseHeight()
                     + " extra=" + extra
                     + " bg=" + (background != null ? background.getHeight() : -1)
                     + " shadow=" + (shadow != null ? shadow.getHeight() : -1)
@@ -656,7 +672,7 @@ final class VolumeButtonInjector {
                 method.setAccessible(true);
                 method.invoke(target, arguments);
             } catch (Throwable error) {
-                Log.e(TAG, "native helper call failed: " + name, error);
+                HookLog.e("native helper call failed: " + name, error);
             }
         }
 

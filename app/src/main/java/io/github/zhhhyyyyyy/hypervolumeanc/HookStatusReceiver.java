@@ -12,7 +12,7 @@ public final class HookStatusReceiver extends BroadcastReceiver {
             return;
         }
         if (HookStatus.ACTION_PONG.equals(intent.getAction())) {
-            HookStatus.acceptAnswer(intent);
+            HookStatus.acceptAnswer(context, intent);
         }
     }
 }

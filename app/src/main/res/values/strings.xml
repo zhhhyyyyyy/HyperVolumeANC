@@ -27,6 +27,9 @@
     <string name="home_group_module">模块</string>
     <string name="home_module_enable_title">启用音量面板按钮</string>
     <string name="home_module_enable_summary">连接兼容耳机时，在音量面板显示降噪控制行与断开连接按钮。</string>
+    <string name="home_app_volume_title">音量条上方的分应用音量入口</string>
+    <string name="home_app_volume_summary">有应用正在播放声音时，在音量条上方显示一个入口按钮，点开后可单独调节每个应用的音量。</string>
+    <string name="home_app_volume_hint">入口面板由「音质音效（小米声音）」提供，请在 LSPosed 中一并勾选它的作用域。没有应用发声时不会多出这个按钮，也不会占用音量面板的空间。请只保留一个提供同类功能的模块（例如 AppVolumeBarHook、Soundman），同时开启可能互相影响。</string>
     <string name="home_cycle_title">循环包含关闭模式</string>
     <string name="home_cycle_on_summary">开启：降噪 → 通透 → 关闭 依次循环。</string>
     <string name="home_cycle_off_summary">关闭：仅在降噪与通透之间切换。</string>
@@ -51,10 +54,27 @@
     <!-- 设置 -->
     <string name="settings_group_status">模块状态</string>
     <string name="settings_status_title">LSPosed 模块</string>
-    <string name="settings_status_hint">模块在系统界面与蓝牙扩展中加载后会立即上报状态；若显示未连接，请确认已在 LSPosed 中启用模块并勾选这两个作用域。</string>
-    <string name="settings_status_detail">系统界面：%1$s · 蓝牙扩展：%2$s</string>
+    <string name="settings_status_hint">模块在系统界面、蓝牙扩展与音质音效中加载后会立即上报状态；若显示未连接，请确认已在 LSPosed 中启用模块并勾选这三个作用域。</string>
+    <string name="settings_status_detail">系统界面：%1$s · 蓝牙扩展：%2$s · 音质音效：%3$s</string>
+    <string name="settings_status_open">点按查看运行诊断</string>
+    <string name="diagnostics_title">运行诊断</string>
+    <string name="diagnostics_summary">实时显示各作用域里功能是否生效，以及没生效的原因</string>
+    <string name="diagnostics_hint">内容由各作用域进程现场上报：诊断页会先向三个作用域发探测请求，未连接的作用域不会显示条目。运行诊断只读取状态，不会修改任何设置。如果同时装了提供同类功能的模块（如 AppVolumeBarHook、Soundman），建议只保留一个。</string>
+    <string name="diagnostics_refresh">重新检测</string>
+    <string name="diagnostics_empty">暂无上报，点右上角重新检测</string>
+    <string name="diagnostics_count">命中 %1$d 次</string>
+    <string name="diagnostics_report_meta">版本 %1$s · PID %2$d</string>
+    <string name="diagnostics_state_ok">正常</string>
+    <string name="diagnostics_state_waiting">等待触发</string>
+    <string name="diagnostics_state_missing">当前环境不适用</string>
+    <string name="diagnostics_state_failed">挂载失败</string>
+    <string name="diagnostics_copy">复制诊断信息</string>
+    <string name="diagnostics_copy_summary">整理成纯文本复制到剪贴板，方便贴到群里或 Issue 里</string>
+    <string name="diagnostics_copy_done">诊断信息已复制</string>
+    <string name="diagnostics_copy_failed">复制失败，请重试</string>
     <string name="settings_scope_systemui">系统界面</string>
     <string name="settings_scope_bluetooth">蓝牙扩展</string>
+    <string name="settings_scope_misound">音质音效</string>
     <string name="settings_group_module">模块行为</string>
     <string name="settings_island_title">降噪 / 通透通知</string>
     <string name="settings_island_summary">切换降噪或通透时用状态栏超级岛提示，切到关闭不会打扰</string>
@@ -110,7 +130,7 @@
     <!-- 关于 -->
     <string name="about_tagline">版本 %1$s · 测试于小米澎湃 OS 4</string>
     <string name="about_feature_title">功能说明</string>
-    <string name="about_feature_body">添加澎湃OS4音量条除静音和勿扰外的第三个实例按钮来支持降噪通透与关闭三种状态的切换；展开音量条耳机菜单还可以直接断开已连接耳机</string>
+    <string name="about_feature_body">添加澎湃OS4音量条除静音和勿扰外的第三个实例按钮来支持降噪通透与关闭三种状态的切换；展开音量条耳机菜单还可以直接断开已连接耳机；有应用播放声音时，音量条上方还会多出一个分应用音量入口</string>
     <string name="about_developer_label">开发者</string>
     <string name="about_developer_tip_title">开发者的话</string>
     <string name="about_developer_tip_body">这个模块最初只是想增加一种更符合直觉且更便捷的降噪切换按钮。使用中遇到问题欢迎到群里反馈，也欢迎去 GitHub 提 Issue；如果你觉得好用，帮忙点个 Star 就足够了。</string>
@@ -125,7 +145,7 @@
     <string name="about_miuix_summary">HyperOS 风格组件库</string>
     <string name="about_package">应用包名</string>
     <string name="about_scope">模块作用域</string>
-    <string name="about_scopes_value">com.android.systemui\ncom.xiaomi.bluetooth</string>
+    <string name="about_scopes_value">com.android.systemui\ncom.xiaomi.bluetooth\ncom.miui.misound</string>
     <string name="about_copyright">© 2026 %1$s</string>
 
     <!-- 开源代码声明 -->
@@ -137,6 +157,7 @@
     <string name="license_oppopods_fork_desc">OppoPods 分支，额外在蓝牙扩展进程内伪装 MIUI 耳机支持</string>
     <string name="license_huaweipods_desc">Huawei 耳机兼容与控制接口</string>
     <string name="license_sonypods_desc">Sony 耳机状态与切换命令接口</string>
+    <string name="license_appvolumebarhook_desc">音量条分应用音量入口的交互与面板排布参考（GPL-3.0）</string>
     <string name="license_hyperchanger_desc">底部导航栏（HyperOS 底栏 / 悬浮底栏 / 液态玻璃底栏）代码，Apache License 2.0</string>
     <string name="license_hyperceiler_desc">关于页渐变背景与引导页版式参考</string>
     <string name="license_liquidglass_desc">底栏玻璃质感渲染依赖（backdrop / shapes）· Apache License 2.0</string>
@@ -148,7 +169,7 @@
     <string name="contributor_openai_role">本模块大部分代码与界面由 Codex 实现</string>
     <string name="contributor_claude_role">Anthropic · 代码与文案协助</string>
     <string name="contributor_1812z_role">OppoPods 分支作者 · OPPO 耳机兼容</string>
-    <string name="contributor_leaf_role">OppoPods 作者 · OPPO 耳机兼容</string>
+    <string name="contributor_leaf_role">OppoPods 与 AppVolumeBarHook 作者 · OPPO 耳机兼容、分应用音量入口参考</string>
     <string name="contributor_nshpiter_role">HuaweiPods 作者 · Huawei 耳机兼容</string>
     <string name="contributor_mercury_role">SonyPods 作者 · Sony 耳机兼容</string>
     <string name="contributor_kavish_role">LibrePods 作者 · AirPods 协议与图标</string>
@@ -162,6 +183,7 @@
     <string name="oobe_welcome_point_1">音量面板新增一个实例按钮，在静音与勿扰之外快速切换降噪</string>
     <string name="oobe_welcome_point_2">支持降噪、通透、关闭三种状态，可按需选择是否循环到关闭</string>
     <string name="oobe_welcome_point_3">展开音量面板的耳机菜单，可直接断开当前连接的耳机</string>
+    <string name="oobe_welcome_point_4">有应用在播放声音时，音量条上方会多出一个入口，点开可单独调节每个应用的音量</string>
     <string name="oobe_developer_name">zhhhyyyyyy</string>
     <string name="oobe_developer_project_title">本项目链接</string>
     <string name="oobe_developer_project_placeholder">尚未发布，敬请期待</string>
@@ -170,7 +192,7 @@
     <string name="oobe_developer_codex">你还能有 Codex 聪明？</string>
     <string name="oobe_developer_codex_summary">本模块的界面与代码是 Codex 一起写出来的</string>
     <string name="oobe_terms_title">条款与声明</string>
-    <string name="oobe_terms_body">1. HyperVolumeANC 是运行在 LSPosed 上的本地模块，只修改本机音量面板的显示与耳机控制行为；除检查更新时会访问本项目的更新地址外不会联网，也不收集、上传任何个人信息。\n\n2. 使用前请在 LSPosed 中启用本模块，并勾选“系统界面（com.android.systemui）”与“蓝牙扩展（com.xiaomi.bluetooth）”两个作用域，否则音量面板不会出现降噪按钮。\n\n3. 小米耳机与 AirPods 由系统原生支持；Sony、Huawei、OPPO 耳机分别依赖 SonyPods、HuaweiPods、OppoPods 等第三方模块，请同时遵守这些项目的许可与使用条款。\n\n4. 本模块按“现状”提供，不附带任何担保。刷机、模块冲突、系统升级都可能造成异常，请在了解风险的前提下使用。\n\n5. 重新安装或清除应用数据后，需要重新阅读并同意本条款。</string>
+    <string name="oobe_terms_body">1. HyperVolumeANC 是运行在 LSPosed 上的本地模块，只修改本机音量面板的显示与耳机控制行为；除检查更新时会访问本项目的更新地址外不会联网，也不收集、上传任何个人信息。\n\n2. 使用前请在 LSPosed 中启用本模块，并勾选“系统界面（com.android.systemui）”与“蓝牙扩展（com.xiaomi.bluetooth）”两个作用域，否则音量面板不会出现降噪按钮；如果还想使用音量条上方的分应用音量入口，请一并勾选“音质音效（com.miui.misound）”。\n\n3. 小米耳机与 AirPods 由系统原生支持；Sony、Huawei、OPPO 耳机分别依赖 SonyPods、HuaweiPods、OppoPods 等第三方模块，请同时遵守这些项目的许可与使用条款。\n\n4. 本模块按“现状”提供，不附带任何担保。刷机、模块冲突、系统升级都可能造成异常，请在了解风险的前提下使用。\n\n5. 重新安装或清除应用数据后，需要重新阅读并同意本条款。</string>
     <string name="oobe_terms_agree">我已阅读并同意上述条款</string>
     <string name="oobe_done_title">一切就绪</string>
     <string name="oobe_done_summary">模块开关与支持的耳机在“主页”，模块状态与外观设置、应用信息在“设置”页，关于信息在“关于”页。如果音量面板没有出现降噪按钮，请确认作用域已勾选，并重启一次作用域或手机。如果觉得好用，欢迎到 GitHub 给项目点个 Star。</string>

@@ -88,6 +88,9 @@ public final class InfoActivity extends Activity {
         addProject(card, true, "SonyPods", "",
                 getString(R.string.license_sonypods_desc),
                 "https://github.com/Mercury000/SonyPods");
+        addProject(card, true, "AppVolumeBarHook", "",
+                getString(R.string.license_appvolumebarhook_desc),
+                "https://github.com/Leaf-lsgtky/AppVolumeBarHook");
         addProject(card, true, "HyperChanger", "",
                 getString(R.string.license_hyperchanger_desc),
                 "https://github.com/ColdP/HyperChanger");

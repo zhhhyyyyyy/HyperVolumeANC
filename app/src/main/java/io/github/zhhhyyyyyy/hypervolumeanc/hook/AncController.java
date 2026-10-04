@@ -262,8 +262,10 @@ final class AncController {
 
     void applySettings() {
         Log.i(TAG, "module options changed enabled=" + HyperVolumeAncSettings.moduleEnabled()
-                + " includeOff=" + HyperVolumeAncSettings.cycleIncludesOff());
+                + " includeOff=" + HyperVolumeAncSettings.cycleIncludesOff()
+                + " appVolume=" + HyperVolumeAncSettings.appVolumeEntryEnabled());
         publish(activeDevice, currentMode);
+        MediaVolumeEntry.refreshVisibility();
     }
 
     void refresh() {
@@ -620,6 +622,15 @@ final class AncController {
         currentMode = mode;
         boolean available = device != null && HyperVolumeAncSettings.moduleEnabled();
         boolean includeOff = HyperVolumeAncSettings.cycleIncludesOff();
+        HookDiagnostics.record("sysui_anc", "耳机降噪控制行",
+                available ? HookDiagnostics.State.OK : HookDiagnostics.State.WAITING,
+                !HyperVolumeAncSettings.moduleEnabled()
+                        ? "设置里已关闭音量面板按钮"
+                        : (device == null
+                                ? "未连接兼容耳机，按钮不显示"
+                                : "耳机=" + safeDeviceName(device) + " · 模式="
+                                        + modeLabel(mode) + " · 循环包含关闭="
+                                        + (includeOff ? "是" : "否")));
         mainHandler.post(() -> {
             Iterator<ButtonBinding> iterator = bindings.iterator();
             while (iterator.hasNext()) {
@@ -636,6 +647,15 @@ final class AncController {
 
     private void showToast(String message) {
         mainHandler.post(() -> Toast.makeText(context, message, Toast.LENGTH_SHORT).show());
+    }
+
+    /** 诊断页里用的模式名。 */
+    private static String modeLabel(int mode) {
+        return switch (mode) {
+            case MODE_NOISE_CANCELLING -> "降噪";
+            case MODE_TRANSPARENCY -> "通透";
+            default -> "关闭";
+        };
     }
 
     private String safeName(BluetoothDevice device) {

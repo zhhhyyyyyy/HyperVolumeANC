@@ -23,6 +23,8 @@ final class HookHeartbeat {
     static final String ACTION_PONG = "io.github.zhhhyyyyyy.hypervolumeanc.action.PONG";
     static final String EXTRA_PROCESS = "process";
     static final String EXTRA_NONCE = "nonce";
+    /** 运行诊断报告（JSON），随心跳一起上报给设置页。 */
+    static final String EXTRA_REPORT_JSON = "report_json";
     static final String MODULE_PACKAGE = "io.github.zhhhyyyyyy.hypervolumeanc";
 
     private static final String TAG = "HyperVolumeANC";
@@ -53,13 +55,15 @@ final class HookHeartbeat {
 
     private static void send(Context context, String processName) {
         try {
+            HookDiagnostics.attachContext(context);
             context.sendBroadcast(new Intent(ACTION_HOOK_ALIVE)
                     .setPackage(MODULE_PACKAGE)
                     .addFlags(Intent.FLAG_RECEIVER_FOREGROUND)
-                    .putExtra(EXTRA_PROCESS, processName));
-            Log.i(TAG, "reported module loaded process=" + processName);
+                    .putExtra(EXTRA_PROCESS, processName)
+                    .putExtra(EXTRA_REPORT_JSON, HookDiagnostics.reportJson(processName)));
+            HookLog.i("reported module loaded process=" + processName);
         } catch (Throwable error) {
-            Log.w(TAG, "failed to report module state", error);
+            HookLog.w("failed to report module state", error);
         }
     }
 
@@ -85,15 +89,17 @@ final class HookHeartbeat {
                                 .setPackage(MODULE_PACKAGE)
                                 .addFlags(Intent.FLAG_RECEIVER_FOREGROUND)
                                 .putExtra(EXTRA_PROCESS, processName)
-                                .putExtra(EXTRA_NONCE, nonce));
-                        Log.i(TAG, "answered status probe process=" + processName);
+                                .putExtra(EXTRA_NONCE, nonce)
+                                .putExtra(EXTRA_REPORT_JSON,
+                                        HookDiagnostics.reportJson(processName)));
+                        HookLog.i("answered status probe process=" + processName);
                     } catch (Throwable error) {
-                        Log.w(TAG, "failed to answer status probe", error);
+                        HookLog.w("failed to answer status probe", error);
                     }
                 }
             }, new IntentFilter(ACTION_PING), Context.RECEIVER_EXPORTED);
         } catch (Throwable error) {
-            Log.w(TAG, "failed to listen for status probe", error);
+            HookLog.w("failed to listen for status probe", error);
         }
     }
 
@@ -111,7 +117,7 @@ final class HookHeartbeat {
                         return result;
                     });
         } catch (Throwable error) {
-            Log.w(TAG, "heartbeat application attach hook unavailable", error);
+            HookLog.w("heartbeat application attach hook unavailable", error);
         }
     }
 
@@ -129,7 +135,7 @@ final class HookHeartbeat {
                         return chain.proceed();
                     });
         } catch (Throwable error) {
-            Log.w(TAG, "heartbeat instrumentation hook unavailable", error);
+            HookLog.w("heartbeat instrumentation hook unavailable", error);
         }
     }
 

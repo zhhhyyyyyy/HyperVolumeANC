@@ -26,6 +26,9 @@
     <string name="home_group_module">Module</string>
     <string name="home_module_enable_title">Volume panel button</string>
     <string name="home_module_enable_summary">Show the noise control row and the disconnect button in the volume panel when a supported headset is connected.</string>
+    <string name="home_app_volume_title">Per-app volume entry above the slider</string>
+    <string name="home_app_volume_summary">While an app is playing audio, show an entry button above the volume bar that opens a panel where every app can be adjusted on its own.</string>
+    <string name="home_app_volume_hint">The panel itself comes from Sound effects (MiSound), so enable that scope in LSPosed as well. Nothing is added to the panel while no app is playing. Keep only one module with the same feature (for example AppVolumeBarHook or Soundman) — running both may interfere with each other.</string>
     <string name="home_cycle_title">Include Off in the cycle</string>
     <string name="home_cycle_on_summary">On: Noise cancelling → Transparency → Off.</string>
     <string name="home_cycle_off_summary">Off: switch between noise cancelling and transparency only.</string>
@@ -50,10 +53,27 @@
     <!-- Settings -->
     <string name="settings_group_status">Module status</string>
     <string name="settings_status_title">LSPosed module</string>
-    <string name="settings_status_hint">Each scoped process reports back as soon as the module is loaded. If it shows “Not connected”, make sure the module is enabled in LSPosed with the System UI and Bluetooth extension scopes checked.</string>
-    <string name="settings_status_detail">System UI: %1$s · Bluetooth extension: %2$s</string>
+    <string name="settings_status_hint">Each scoped process reports back as soon as the module is loaded. If it shows “Not connected”, make sure the module is enabled in LSPosed with the System UI, Bluetooth extension and Sound effects scopes checked.</string>
+    <string name="settings_status_detail">System UI: %1$s · Bluetooth extension: %2$s · Sound effects: %3$s</string>
+    <string name="settings_status_open">Tap to open the runtime diagnostics</string>
+    <string name="diagnostics_title">Runtime diagnostics</string>
+    <string name="diagnostics_summary">Shows live whether each scoped process has the features working, and why not when something is missing</string>
+    <string name="diagnostics_hint">The content is reported by the scoped processes themselves: this page first probes all three scopes, so a scope that is not connected will not list any entries. Diagnostics only read state and never change your settings. If you also run a module with the same feature (such as AppVolumeBarHook or Soundman), keep only one of them.</string>
+    <string name="diagnostics_refresh">Probe again</string>
+    <string name="diagnostics_empty">No report yet — use “Probe again” in the top right corner</string>
+    <string name="diagnostics_count">%1$d hits</string>
+    <string name="diagnostics_report_meta">Version %1$s · PID %2$d</string>
+    <string name="diagnostics_state_ok">Working</string>
+    <string name="diagnostics_state_waiting">Waiting</string>
+    <string name="diagnostics_state_missing">Not applicable here</string>
+    <string name="diagnostics_state_failed">Hook failed</string>
+    <string name="diagnostics_copy">Copy diagnostics</string>
+    <string name="diagnostics_copy_summary">Copy a plain-text summary to the clipboard so it can be pasted into a chat or an issue</string>
+    <string name="diagnostics_copy_done">Diagnostics copied</string>
+    <string name="diagnostics_copy_failed">Copy failed, please try again</string>
     <string name="settings_scope_systemui">System UI</string>
     <string name="settings_scope_bluetooth">Bluetooth extension</string>
+    <string name="settings_scope_misound">Sound effects</string>
     <string name="settings_group_module">Module behaviour</string>
     <string name="settings_island_title">Noise control notification</string>
     <string name="settings_island_summary">Show a status bar island notice when switching noise cancelling or transparency; switching off stays silent</string>
@@ -109,7 +129,7 @@
     <!-- About -->
     <string name="about_tagline">Version %1$s · tested on Xiaomi HyperOS 4</string>
     <string name="about_feature_title">What it does</string>
-    <string name="about_feature_body">Adds a third instance button next to silent and DND in the HyperOS 4 volume panel so noise cancelling, transparency and off can be switched directly. Expanding the headset menu in the volume panel also lets you disconnect the connected headset.</string>
+    <string name="about_feature_body">Adds a third instance button next to silent and DND in the HyperOS 4 volume panel so noise cancelling, transparency and off can be switched directly. Expanding the headset menu in the volume panel also lets you disconnect the connected headset. While an app is playing audio, a per-app volume entry appears above the volume bar.</string>
     <string name="about_developer_label">Developer</string>
     <string name="about_developer_tip_title">A note from the developer</string>
     <string name="about_developer_tip_body">This module started with a simple idea: a more intuitive and quicker way to switch noise cancelling. If you run into problems, feel free to ask in the group or open an issue on GitHub. If it works well for you, a star is more than enough.</string>
@@ -124,7 +144,7 @@
     <string name="about_miuix_summary">HyperOS style component library</string>
     <string name="about_package">Package name</string>
     <string name="about_scope">Module scopes</string>
-    <string name="about_scopes_value">com.android.systemui\ncom.xiaomi.bluetooth</string>
+    <string name="about_scopes_value">com.android.systemui\ncom.xiaomi.bluetooth\ncom.miui.misound</string>
     <string name="about_copyright">© 2026 %1$s</string>
 
     <!-- Licences -->
@@ -136,6 +156,7 @@
     <string name="license_oppopods_fork_desc">OppoPods fork that also fakes MIUI headset support inside the Bluetooth extension</string>
     <string name="license_huaweipods_desc">Huawei headset compatibility and control interface</string>
     <string name="license_sonypods_desc">Sony headset state and control interface</string>
+    <string name="license_appvolumebarhook_desc">Reference for the per-app volume entry and its panel layout (GPL-3.0)</string>
     <string name="license_hyperchanger_desc">Bottom navigation bar (HyperOS / floating / liquid glass), Apache License 2.0</string>
     <string name="license_hyperceiler_desc">Reference for the about page gradient and the onboarding layout</string>
     <string name="license_liquidglass_desc">Glass material libraries used by the bar (backdrop / shapes) · Apache License 2.0</string>
@@ -147,7 +168,7 @@
     <string name="contributor_openai_role">Wrote most of the code and UI of this module</string>
     <string name="contributor_claude_role">Anthropic · code and copy assistance</string>
     <string name="contributor_1812z_role">OppoPods fork author · OPPO headset support</string>
-    <string name="contributor_leaf_role">OppoPods author · OPPO headset support</string>
+    <string name="contributor_leaf_role">OppoPods &amp; AppVolumeBarHook author · OPPO headset support and the per-app volume entry reference</string>
     <string name="contributor_nshpiter_role">HuaweiPods author · Huawei headset support</string>
     <string name="contributor_mercury_role">SonyPods author · Sony headset support</string>
     <string name="contributor_kavish_role">LibrePods author · AirPods protocol and icons</string>
@@ -161,6 +182,7 @@
     <string name="oobe_welcome_point_1">Adds one more instance button next to silent and DND so noise cancelling is one tap away</string>
     <string name="oobe_welcome_point_2">Supports noise cancelling, transparency and off, with an optional three state cycle</string>
     <string name="oobe_welcome_point_3">Expanding the headset menu in the volume panel lets you disconnect the headset directly</string>
+    <string name="oobe_welcome_point_4">While an app is playing audio, an entry appears above the volume bar that opens a panel for adjusting every app on its own</string>
     <string name="oobe_developer_name">zhhhyyyyyy</string>
     <string name="oobe_developer_project_title">Project link</string>
     <string name="oobe_developer_project_placeholder">Not published yet</string>
@@ -169,7 +191,7 @@
     <string name="oobe_developer_codex">Think you can outsmart Codex?</string>
     <string name="oobe_developer_codex_summary">This module and its interface were written together with Codex</string>
     <string name="oobe_terms_title">Terms and notices</string>
-    <string name="oobe_terms_body">1. HyperVolumeANC is a local module that runs on LSPosed. It only changes how the volume panel looks and how headsets are controlled on this device. It only reaches the network to check for updates and never collects or uploads personal data.\n\n2. Enable the module in LSPosed and check the “System UI (com.android.systemui)” and “Bluetooth extension (com.xiaomi.bluetooth)” scopes, otherwise the noise control button will not appear in the volume panel.\n\n3. Xiaomi earbuds and AirPods are supported by the system itself. Sony, Huawei and OPPO headsets rely on third party modules such as SonyPods, HuaweiPods and OppoPods; their licences and terms also apply.\n\n4. This module is provided “as is” without any warranty. Flashing, module conflicts and system updates can all cause problems, so please use it with that in mind.\n\n5. After reinstalling or clearing app data you will be asked to read and accept these terms again.</string>
+    <string name="oobe_terms_body">1. HyperVolumeANC is a local module that runs on LSPosed. It only changes how the volume panel looks and how headsets are controlled on this device. It only reaches the network to check for updates and never collects or uploads personal data.\n\n2. Enable the module in LSPosed and check the “System UI (com.android.systemui)” and “Bluetooth extension (com.xiaomi.bluetooth)” scopes, otherwise the noise control button will not appear in the volume panel. Check the “Sound effects (com.miui.misound)” scope too if you want the per-app volume entry above the volume bar.\n\n3. Xiaomi earbuds and AirPods are supported by the system itself. Sony, Huawei and OPPO headsets rely on third party modules such as SonyPods, HuaweiPods and OppoPods; their licences and terms also apply.\n\n4. This module is provided “as is” without any warranty. Flashing, module conflicts and system updates can all cause problems, so please use it with that in mind.\n\n5. After reinstalling or clearing app data you will be asked to read and accept these terms again.</string>
     <string name="oobe_terms_agree">I have read and accept the terms above</string>
     <string name="oobe_done_title">All set</string>
     <string name="oobe_done_summary">Module switches and supported headsets live in Home, module status, appearance and app info in Settings, and the credits in About. If the noise control button does not show up in the volume panel, check the scopes and restart the scopes or the phone once. If it works for you, a star on GitHub is much appreciated.</string>

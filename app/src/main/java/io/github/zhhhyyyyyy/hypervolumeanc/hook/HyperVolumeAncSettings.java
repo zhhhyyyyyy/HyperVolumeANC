@@ -18,6 +18,7 @@ final class HyperVolumeAncSettings {
     static final String EXTRA_MODULE_ENABLED = "module_enabled";
     static final String EXTRA_CYCLE_INCLUDE_OFF = "cycle_include_off";
     static final String EXTRA_ISLAND_NOTIFICATION = "island_notification";
+    static final String EXTRA_APP_VOLUME_ENTRY = "app_volume_entry";
 
     private static final String TAG = "HyperVolumeANC";
     private static final Uri CONFIG_URI = Uri.parse("content://io.github.zhhhyyyyyy.hypervolumeanc.config");
@@ -30,6 +31,7 @@ final class HyperVolumeAncSettings {
     private static volatile boolean moduleEnabled = true;
     private static volatile boolean cycleIncludeOff;
     private static volatile boolean islandNotification = true;
+    private static volatile boolean appVolumeEntry = true;
 
     private HyperVolumeAncSettings() {
     }
@@ -57,6 +59,11 @@ final class HyperVolumeAncSettings {
         return islandNotification;
     }
 
+    /** 是否在音量条上方显示分应用音量入口（有应用发声时才出现）。 */
+    static boolean appVolumeEntryEnabled() {
+        return appVolumeEntry;
+    }
+
     private static void registerReceiver() {
         if (observing) {
             return;
@@ -77,16 +84,19 @@ final class HyperVolumeAncSettings {
                             EXTRA_CYCLE_INCLUDE_OFF, cycleIncludeOff);
                     islandNotification = intent.getBooleanExtra(
                             EXTRA_ISLAND_NOTIFICATION, islandNotification);
+                    appVolumeEntry = intent.getBooleanExtra(
+                            EXTRA_APP_VOLUME_ENTRY, appVolumeEntry);
                     loaded = true;
-                    Log.i(TAG, "module options changed enabled=" + moduleEnabled
+                    HookLog.i("module options changed enabled=" + moduleEnabled
                             + " includeOff=" + cycleIncludeOff
-                            + " island=" + islandNotification);
+                            + " island=" + islandNotification
+                            + " appVolume=" + appVolumeEntry);
                     notifyChanged();
                 }
             }, new IntentFilter(ACTION_CONFIG_CHANGED), Context.RECEIVER_EXPORTED);
             observing = true;
         } catch (Throwable error) {
-            Log.w(TAG, "failed to observe module options", error);
+            HookLog.w("failed to observe module options", error);
         }
     }
 
@@ -99,6 +109,7 @@ final class HyperVolumeAncSettings {
         boolean previousEnabled = moduleEnabled;
         boolean previousIncludeOff = cycleIncludeOff;
         boolean previousIsland = islandNotification;
+        boolean previousAppVolume = appVolumeEntry;
         try {
             Bundle result = context.getContentResolver().call(CONFIG_URI, METHOD_GET, null, null);
             if (result == null) {
@@ -107,17 +118,20 @@ final class HyperVolumeAncSettings {
             moduleEnabled = result.getBoolean(EXTRA_MODULE_ENABLED, true);
             cycleIncludeOff = result.getBoolean(EXTRA_CYCLE_INCLUDE_OFF, false);
             islandNotification = result.getBoolean(EXTRA_ISLAND_NOTIFICATION, true);
+            appVolumeEntry = result.getBoolean(EXTRA_APP_VOLUME_ENTRY, true);
             loaded = true;
-            Log.i(TAG, "module options loaded enabled=" + moduleEnabled
+            HookLog.i("module options loaded enabled=" + moduleEnabled
                     + " includeOff=" + cycleIncludeOff
-                    + " island=" + islandNotification);
+                    + " island=" + islandNotification
+                    + " appVolume=" + appVolumeEntry);
         } catch (Throwable error) {
-            Log.w(TAG, "failed to read module options", error);
+            HookLog.w("failed to read module options", error);
             return;
         }
         if (!hadValues || previousEnabled != moduleEnabled
                 || previousIncludeOff != cycleIncludeOff
-                || previousIsland != islandNotification) {
+                || previousIsland != islandNotification
+                || previousAppVolume != appVolumeEntry) {
             notifyChanged();
         }
     }
