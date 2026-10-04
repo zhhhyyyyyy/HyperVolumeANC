@@ -13,8 +13,8 @@ android {
         minSdk = 34
         targetSdk = 36
         // 版本号自 1.7.2 起用日期命名：年月日时（YYMMDDHH，年份取后两位），不再逐个递增。
-        versionCode = 26092120
-        versionName = "1.7.2"
+        versionCode = 26100501
+        versionName = "1.8.1"
     }
 
     buildTypes {
