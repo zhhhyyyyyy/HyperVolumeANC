@@ -275,13 +275,13 @@ final class AncController {
     }
 
     void toggle() {
-        Log.i(TAG, "ANC button clicked service=" + (service != null) + " binding=" + binding);
+        HookLog.i("ANC button clicked service=" + (service != null) + " binding=" + binding);
         ensureBound();
         worker.post(() -> {
             IBinder binder = service;
             BluetoothDevice device = resolveSupportedDevice(binder);
             if (binder == null || device == null) {
-                Log.w(TAG, "toggle aborted binder=" + (binder != null) + " device=" + safeName(device));
+                HookLog.w("toggle aborted binder=" + (binder != null) + " device=" + safeName(device));
                 showToast("未找到已连接的兼容耳机");
                 publish(null, MODE_OFF);
                 return;
@@ -290,7 +290,7 @@ final class AncController {
             int mode = readMode(binder, device);
             int target = nextMode(mode, supportsTransparency(),
                     HyperVolumeAncSettings.cycleIncludesOff());
-            Log.i(TAG, "changing ANC device=" + safeName(device)
+            HookLog.i("changing ANC device=" + safeName(device)
                     + " kind=" + activeDeviceKind + " route=" + activeHuaweiRoute
                     + " current=" + mode + " target=" + target);
             if (changeMode(binder, device, target)) {
@@ -480,7 +480,7 @@ final class AncController {
             }
             reply.readException();
             String support = reply.readString();
-            Log.i(TAG, "checkSupport device=" + safeName(device) + " result=" + support);
+            HookLog.i("checkSupport device=" + safeName(device) + " result=" + support);
             if (support == null || support.isBlank()) {
                 if (isOppoPodsControlled(device)) {
                     return acceptOppoDevice(device);
@@ -524,7 +524,7 @@ final class AncController {
             }
             return true;
         } catch (Throwable error) {
-            Log.w(TAG, "checkSupport failed for " + safeName(device), error);
+            HookLog.w("checkSupport failed for " + safeName(device), error);
             return false;
         } finally {
             reply.recycle();
@@ -601,15 +601,15 @@ final class AncController {
             data.writeInt(mode);
             data.writeTypedObject(device, 0);
             if (!binder.transact(TRANSACTION_CHANGE_ANC_MODE, data, reply, 0)) {
-                Log.e(TAG, "changeAncMode transact returned false device=" + safeName(device)
+                HookLog.e("changeAncMode transact returned false device=" + safeName(device)
                         + " mode=" + mode);
                 return false;
             }
             reply.readException();
-            Log.i(TAG, "ANC mode changed device=" + safeName(device) + " mode=" + mode);
+            HookLog.i("ANC mode changed device=" + safeName(device) + " mode=" + mode);
             return true;
         } catch (Throwable error) {
-            Log.e(TAG, "changeAncMode failed for " + safeName(device), error);
+            HookLog.e("changeAncMode failed for " + safeName(device), error);
             return false;
         } finally {
             reply.recycle();

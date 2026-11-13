@@ -105,6 +105,10 @@ final class VolumeButtonInjector {
     }
 
     static void onExpanded(Object target, boolean expanded, boolean force) {
+        if (expanded) {
+            // 面板每次展开都补读一次设置，规避 provider 早先不可用导致的陈旧值。
+            HyperVolumeAncSettings.reloadAsync();
+        }
         NativeButton button = findNativeButton(target);
         if (button != null) {
             button.updateExpanded(expanded, force);
