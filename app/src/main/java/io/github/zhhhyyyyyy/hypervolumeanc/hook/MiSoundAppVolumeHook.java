@@ -77,6 +77,17 @@ final class MiSoundAppVolumeHook {
     private static volatile ClassLoader appClassLoader;
     private static final Handler MAIN = new Handler(Looper.getMainLooper());
 
+    /**
+     * 4.0.3.0 起控制器的两个入口被重新混淆：展开 y() → z()、收起 g() → h()。
+     * 两个名字都认：老版本命中第一个，新版本命中第二个，日志里会写出实际用的是哪个。
+     */
+    private static final String[] EXPAND_METHOD_NAMES = {"y", "z"};
+    private static final String[] DISMISS_METHOD_NAMES = {"g", "h"};
+
+    private static final int ROLE_LAYOUT = 0;
+    private static final int ROLE_EXPAND = 1;
+    private static final int ROLE_COLUMNS = 2;
+
     private MiSoundAppVolumeHook() {
     }
 
@@ -411,12 +422,16 @@ final class MiSoundAppVolumeHook {
             HookLog.w("direct expand skipped: MiSound app volume controller is unavailable");
             return false;
         }
-        Method show = findMethod(controller.getClass(), "y", 0);
+        Method show = findFirstMethod(controller.getClass(), EXPAND_METHOD_NAMES, 0);
         if (show == null) {
-            // 混淆映射不一致时不做任何猜测性读写，直接走悬浮球点击回退。
-            HookLog.w("direct expand skipped: method y() not found in "
+            HookLog.w("direct expand skipped: no expand entry ("
+                    + String.join("/", EXPAND_METHOD_NAMES) + ") in "
                     + controller.getClass().getName());
             return false;
+        }
+        if (!EXPAND_METHOD_NAMES[0].equals(show.getName())) {
+            HookLog.i("controller expand method " + EXPAND_METHOD_NAMES[0]
+                    + "() is now " + show.getName() + "()");
         }
         try {
             if (getStatus(controller) == STATUS_EXPANDED) {
@@ -580,9 +595,9 @@ final class MiSoundAppVolumeHook {
             HookLog.w("failed to hook the controller constructor", error);
         }
 
-        hookControllerMethod(module, controllerClass, "n", 0, true);
-        hookControllerMethod(module, controllerClass, "y", 0, false);
-        hookControllerMethod(module, controllerClass, "u", 0, false);
+        hookControllerMethod(module, controllerClass, "n", 0, ROLE_LAYOUT);
+        hookControllerMethodByNames(module, controllerClass, EXPAND_METHOD_NAMES, 0, ROLE_EXPAND);
+        hookControllerMethod(module, controllerClass, "u", 0, ROLE_COLUMNS);
         logControllerMethods(controllerClass);
         hookControllerDismiss(module, controllerClass);
         hookAdapter(module, controllerClass, classLoader);
@@ -609,8 +624,29 @@ final class MiSoundAppVolumeHook {
         HookLog.i("controller 0-arg methods: " + builder);
     }
 
+    /** 按候选名字表挂载：命中第一个为止，实际命中哪个都打日志。 */
+    private static void hookControllerMethodByNames(
+            XposedModule module, Class<?> controllerClass,
+            String[] names, int params, int role) {
+        String found = null;
+        for (String name : names) {
+            if (findMethod(controllerClass, name, params) != null) {
+                found = name;
+                break;
+            }
+        }
+        if (found == null) {
+            HookLog.w("controller method " + String.join("/", names) + "() not found");
+            return;
+        }
+        if (!names[0].equals(found)) {
+            HookLog.i("controller method " + names[0] + "() is now " + found + "()");
+        }
+        hookControllerMethod(module, controllerClass, found, params, role);
+    }
+
     private static void hookControllerMethod(
-            XposedModule module, Class<?> controllerClass, String name, int params, boolean layout) {
+            XposedModule module, Class<?> controllerClass, String name, int params, int role) {
         Method method = findMethod(controllerClass, name, params);
         if (method == null) {
             HookLog.w("controller method " + name + "() not found");
@@ -625,12 +661,12 @@ final class MiSoundAppVolumeHook {
                         Object controller = chain.getThisObject();
                         cachedController = new WeakReference<>(controller);
                         hideFloatingBallFromController(controller);
-                        if (layout) {
+                        if (role == ROLE_LAYOUT) {
                             ViewGroup pageView = getMediaVolumePageView(controller);
                             if (pageView != null) {
                                 setupCardLayout(pageView, controller);
                             }
-                        } else if ("y".equals(name)) {
+                        } else if (role == ROLE_EXPAND) {
                             onPanelShown(controller);
                         } else {
                             // u()：没有活跃音源时原生不会清理旧列表，这里补齐。
@@ -683,10 +719,15 @@ final class MiSoundAppVolumeHook {
     }
 
     private static void hookControllerDismiss(XposedModule module, Class<?> controllerClass) {
-        Method dismiss = findMethod(controllerClass, "g", 0);
+        Method dismiss = findFirstMethod(controllerClass, DISMISS_METHOD_NAMES, 0);
         if (dismiss == null) {
-            HookLog.w("controller method g() not found");
+            HookLog.w("controller dismiss method " + String.join("/", DISMISS_METHOD_NAMES)
+                    + "() not found");
             return;
+        }
+        if (!DISMISS_METHOD_NAMES[0].equals(dismiss.getName())) {
+            HookLog.i("controller dismiss method " + DISMISS_METHOD_NAMES[0]
+                    + "() is now " + dismiss.getName() + "()");
         }
         try {
             module.hook(dismiss)
@@ -1464,6 +1505,17 @@ final class MiSoundAppVolumeHook {
         } catch (Throwable ignored) {
             return null;
         }
+    }
+
+    /** 按候选名字表依次查找，返回第一个命中的方法；全都没命中返回 null。 */
+    private static Method findFirstMethod(Class<?> type, String[] names, int parameterCount) {
+        for (String name : names) {
+            Method method = findMethod(type, name, parameterCount);
+            if (method != null) {
+                return method;
+            }
+        }
+        return null;
     }
 
     private static Method findMethod(Class<?> type, String name, int parameterCount) {
